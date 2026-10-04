@@ -1,0 +1,197 @@
+[
+  {
+    "camera_id": "cam_active",
+    "calibration_enabled": true,
+    "points": [
+      {
+        "x": 100.0,
+        "y": 100.0
+      },
+      {
+        "x": 300.0,
+        "y": 100.0
+      },
+      {
+        "x": 300.0,
+        "y": 300.0
+      },
+      {
+        "x": 100.0,
+        "y": 300.0
+      }
+    ],
+    "real_world_width_m": 10.0,
+    "real_world_depth_m": 10.0,
+    "coordinate_system": "GROUND_PLANE_CARTESIAN_METERS",
+    "calibration_status": "CALIBRATED",
+    "homography_matrix": [
+      [
+        0.05,
+        2.2204460492503127e-18,
+        -5.000000000000002
+      ],
+      [
+        0.0,
+        0.04999999999999999,
+        -4.999999999999999
+      ],
+      [
+        -2.220446049250313e-19,
+        2.220446049250313e-19,
+        1.0
+      ]
+    ],
+    "inverse_homography_matrix": [
+      [
+        20.0,
+        0.0,
+        100.0
+      ],
+      [
+        0.0,
+        20.0,
+        100.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "reprojection_error_px": 0.0,
+    "estimated_coverage_area_m2": 100.0,
+    "notes": "Approximate ground-plane spatial estimation",
+    "created_at": 1791048252.4037359,
+    "updated_at": 1791048252.4037187
+  },
+  {
+    "camera_id": "cam_calibrated_01",
+    "calibration_enabled": true,
+    "points": [
+      {
+        "x": 100.0,
+        "y": 100.0
+      },
+      {
+        "x": 300.0,
+        "y": 100.0
+      },
+      {
+        "x": 300.0,
+        "y": 300.0
+      },
+      {
+        "x": 100.0,
+        "y": 300.0
+      }
+    ],
+    "real_world_width_m": 10.0,
+    "real_world_depth_m": 10.0,
+    "coordinate_system": "GROUND_PLANE_CARTESIAN_METERS",
+    "calibration_status": "CALIBRATED",
+    "homography_matrix": [
+      [
+        0.05,
+        2.2204460492503127e-18,
+        -5.000000000000002
+      ],
+      [
+        0.0,
+        0.04999999999999999,
+        -4.999999999999999
+      ],
+      [
+        -2.220446049250313e-19,
+        2.220446049250313e-19,
+        1.0
+      ]
+    ],
+    "inverse_homography_matrix": [
+      [
+        20.0,
+        0.0,
+        100.0
+      ],
+      [
+        0.0,
+        20.0,
+        100.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "reprojection_error_px": 0.0,
+    "estimated_coverage_area_m2": 100.0,
+    "notes": "Approximate ground-plane spatial estimation",
+    "created_at": 1791048252.4120088,
+    "updated_at": 1791048252.4119883
+  },
+  {
+    "camera_id": "cam_tth",
+    "calibration_enabled": true,
+    "points": [
+      {
+        "x": 100.0,
+        "y": 100.0
+      },
+      {
+        "x": 300.0,
+        "y": 100.0
+      },
+      {
+        "x": 300.0,
+        "y": 300.0
+      },
+      {
+        "x": 100.0,
+        "y": 300.0
+      }
+    ],
+    "real_world_width_m": 10.0,
+    "real_world_depth_m": 10.0,
+    "coordinate_system": "GROUND_PLANE_CARTESIAN_METERS",
+    "calibration_status": "CALIBRATED",
+    "homography_matrix": [
+      [
+        0.05,
+        2.2204460492503127e-18,
+        -5.000000000000002
+      ],
+      [
+        0.0,
+        0.04999999999999999,
+        -4.999999999999999
+      ],
+      [
+        -2.220446049250313e-19,
+        2.220446049250313e-19,
+        1.0
+      ]
+    ],
+    "inverse_homography_matrix": [
+      [
+        20.0,
+        0.0,
+        100.0
+      ],
+      [
+        0.0,
+        20.0,
+        100.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "reprojection_error_px": 0.0,
+    "estimated_coverage_area_m2": 100.0,
+    "notes": "Approximate ground-plane spatial estimation",
+    "created_at": 1791048252.4188137,
+    "updated_at": 1791048252.4187932
+  }
+]

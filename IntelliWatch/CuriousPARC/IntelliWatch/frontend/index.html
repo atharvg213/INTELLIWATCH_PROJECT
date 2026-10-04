@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IntelliWatch — Operations Console & Industrial Scene Understanding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/frontend/css/dashboard.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="brand-wrapper">
+      <a href="/" class="brand-link" title="Return to Landing Page" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+        <span class="wordmark">
+          <span class="brand-symbol"><i></i><i></i><i></i><i></i></span>
+          <span>INTELLI<span class="wordmark-light">WATCH</span></span>
+        </span>
+      </a>
+      <div class="brand-breadcrumbs">
+        <span>/</span>
+        <span>OPERATIONS</span>
+        <span>/</span>
+        <b style="color: var(--olive-light);">CONSOLE</b>
+      </div>
+    </div>
+
+    <div class="header-telemetry">
+      <div class="telemetry-item">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="cpuBadge">CPU Mode</span>
+      </div>
+      <div class="telemetry-item">
+        <span style="color: var(--text-muted);">FPS:</span>
+        <span id="fpsBadge" style="color: var(--color-low);">-- FPS</span>
+      </div>
+      <div class="telemetry-item">
+        <span style="color: var(--text-muted);">LATENCY:</span>
+        <span id="latencyBadge">-- ms</span>
+      </div>
+      <div class="telemetry-item">
+        <span id="tracksBadge">Tracks: 0</span>
+      </div>
+      <div class="telemetry-item">
+        <span id="incidentsBadge">Incidents: 0</span>
+      </div>
+      <div class="telemetry-item">
+        <span id="alertsBadge" style="color: #f97316; font-weight: 700;">Alerts: 0 (0 New)</span>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <a href="/" class="btn btn-sm" id="landingNavBtn" title="View Public Landing Page" style="padding: 4px 10px; font-size: 11px; text-decoration: none; border-color: var(--olive);">← Home / Landing</a>
+      <div class="user-pill" id="userPill" style="display: flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 20px; font-size: 11px;">
+        <span class="user-avatar-icon" style="font-size: 13px;">👤</span>
+        <span id="headerUsername" style="font-weight: 600; color: #f8fafc;">admin</span>
+        <span class="badge badge-admin" id="headerRoleBadge" style="font-size: 9px; padding: 1px 6px;">ADMIN</span>
+      </div>
+      <button class="btn btn-sm" id="changePasswordBtn" title="Change Password" style="padding: 4px 8px; font-size: 11px;">🔑</button>
+      <button class="btn btn-sm btn-danger" id="logoutBtn" title="Logout" style="padding: 4px 8px; font-size: 11px;">Logout</button>
+      <button class="btn" id="refreshBtn">Refresh</button>
+      <button class="btn btn-primary" id="pollToggleBtn">Pause Polling</button>
+    </div>
+  </header>
+
+  <!-- OVERVIEW KPI STAT CARDS (FRIEND'S INDUSTRIAL DESIGN SYSTEM) -->
+  <section class="overview-kpi-strip">
+    <div class="stat-card accent">
+      <div class="stat-top">
+        <span>ACTIVE CAMERAS</span>
+        <span class="stat-icon">📡</span>
+      </div>
+      <strong id="statActiveCameras">01 / 01</strong>
+      <small id="statCameraHealth">LIVE STREAM CONNECTIVITY</small>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top">
+        <span>PERSISTED ALERTS</span>
+        <span class="stat-icon">⚠️</span>
+      </div>
+      <strong id="statTotalAlerts">0</strong>
+      <small id="statUnresolvedAlerts">0 UNRESOLVED INCIDENTS</small>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top">
+        <span>SAFETY COMPLIANCE</span>
+        <span class="stat-icon">🛡️</span>
+      </div>
+      <strong id="statComplianceRate">--%</strong>
+      <small>EMPIRICAL EVALUATION</small>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top">
+        <span>RUNTIME INFERENCE</span>
+        <span class="stat-icon">⚡</span>
+      </div>
+      <strong id="statInferenceMode">DETECTING...</strong>
+      <small id="statFpsLatency">-- FPS · -- ms</small>
+    </div>
+  </section>
+
+  <!-- ANALYZE NEW MEDIA SECTION -->
+  <section class="upload-container panel" id="uploadSection">
+    <div class="upload-header">
+      <div class="upload-header-left">
+        <span class="upload-title">ANALYZE NEW MEDIA</span>
+        <span class="upload-subtitle">Direct Scene Understanding & Safety Analysis</span>
+      </div>
+      <div class="upload-mode-toggle">
+        <button class="btn mode-btn active" id="modeImageBtn" type="button">📷 Upload Image</button>
+        <button class="btn mode-btn" id="modeVideoBtn" type="button">🎥 Upload Video</button>
+        <button class="btn mode-btn" id="modeStreamBtn" type="button">📡 Live Cameras (RTSP/CCTV)</button>
+      </div>
+    </div>
+
+    <!-- FILE UPLOAD BODY -->
+    <div class="upload-body" id="uploadBody">
+      <!-- DROP ZONE -->
+      <div class="drop-zone" id="dropZone">
+        <div class="drop-zone-icon" id="dropZoneIcon">📁</div>
+        <div class="drop-zone-text" id="dropZoneText">
+          <strong>Drag & Drop Media Here</strong> or <span class="browse-link">Choose File</span>
+        </div>
+        <div class="drop-zone-hint" id="dropZoneHint">
+          Supported: JPG, JPEG, PNG | MP4, AVI, MOV, MKV (Max 100MB)
+        </div>
+        <input type="file" id="mediaFileInput" accept=".jpg,.jpeg,.png,.mp4,.avi,.mov,.mkv" style="display: none;" />
+      </div>
+
+      <!-- SELECTED FILE CARD -->
+      <div class="selected-file-card" id="selectedFileCard" style="display: none;">
+        <div class="file-info-group">
+          <span class="file-icon" id="selectedFileIcon">📄</span>
+          <div class="file-text-info">
+            <span class="file-name" id="selectedFileName">filename.mp4</span>
+            <div class="file-meta">
+              <span class="badge" id="selectedFileType">VIDEO</span>
+              <span class="file-size" id="selectedFileSize">0 KB</span>
+            </div>
+          </div>
+        </div>
+        <div class="file-action-group">
+          <button class="btn btn-sm btn-danger" id="clearFileBtn" type="button">✕ Remove</button>
+        </div>
+      </div>
+
+      <div class="upload-camera-control">
+        <label for="analysisCameraSelect">SOURCE CAMERA</label>
+        <select id="analysisCameraSelect">
+          <option value="">Unknown / unassigned</option>
+        </select>
+        <span id="analysisCameraCalibrationNotice">Unknown source. Calibration unavailable; metric values will remain in image space.</span>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="upload-actions">
+        <button class="btn btn-primary btn-analyze" id="analyzeBtn" disabled type="button">
+          ▶ ANALYZE MEDIA
+        </button>
+        <button class="btn" id="newAnalysisBtn" style="display: none;" type="button">
+          ↺ New Analysis
+        </button>
+      </div>
+    </div>
+
+    <!-- LIVE CAMERA / RTSP STREAM MANAGER -->
+    <div class="stream-manager-body" id="streamManagerBody" style="display: none; padding: 12px 16px;">
+      <div class="camera-register-card" style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; margin-bottom: 12px;">
+        <div style="font-weight: 700; font-size: 11px; text-transform: uppercase; color: var(--color-info); margin-bottom: 8px;">
+          Register CCTV / RTSP Stream
+        </div>
+        <div class="camera-form-grid" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end;">
+          <div style="flex: 1; min-width: 90px;">
+            <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 3px;" for="camIdInput">Camera ID</label>
+            <input type="text" id="camIdInput" style="width: 100%; background: #070a10; color: #fff; border: 1px solid var(--border-color); border-radius: 4px; padding: 5px 8px; font-size: 12px;" placeholder="cam_01" value="cam_01" />
+          </div>
+          <div style="flex: 1.5; min-width: 140px;">
+            <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 3px;" for="camNameInput">Location Name</label>
+            <input type="text" id="camNameInput" style="width: 100%; background: #070a10; color: #fff; border: 1px solid var(--border-color); border-radius: 4px; padding: 5px 8px; font-size: 12px;" placeholder="Factory Floor East" value="Factory Floor East" />
+          </div>
+          <div style="flex: 3; min-width: 220px;">
+            <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 3px;" for="camSourceInput">Stream Source (RTSP / Video File / Webcam)</label>
+            <input type="text" id="camSourceInput" style="width: 100%; background: #070a10; color: #fff; border: 1px solid var(--border-color); border-radius: 4px; padding: 5px 8px; font-size: 12px;" placeholder="rtsp://... or data/samples/cctv_worker_moving.mp4" value="data/samples/cctv_worker_moving.mp4" />
+          </div>
+          <div style="flex: 0.8; min-width: 70px;">
+            <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 3px;" for="camSamplingInput">Sampling</label>
+            <input type="number" id="camSamplingInput" style="width: 100%; background: #070a10; color: #fff; border: 1px solid var(--border-color); border-radius: 4px; padding: 5px 8px; font-size: 12px;" min="1" max="10" value="1" title="Process every Nth frame" />
+          </div>
+          <div style="flex: 0.8; min-width: 70px;">
+            <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 3px;" for="camMaxFpsInput">Max FPS</label>
+            <input type="number" id="camMaxFpsInput" style="width: 100%; background: #070a10; color: #fff; border: 1px solid var(--border-color); border-radius: 4px; padding: 5px 8px; font-size: 12px;" min="1" max="30" value="10" title="Processing FPS limit" />
+          </div>
+          <div>
+            <button class="btn btn-primary" id="addCameraBtn" type="button" style="padding: 6px 14px; font-size: 12px;">＋ Add & Start</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cameras-list-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: 11px; font-weight: 600; color: var(--text-secondary);" id="cameraCountBadge">Registered Cameras: 0 Active (0 Connected)</span>
+          <button class="btn btn-sm" id="refreshCamerasBtn" type="button">↻ Refresh Cameras</button>
+        </div>
+        <div id="camerasGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- PROCESSING PROGRESS & TELEMETRY CARD -->
+    <div class="processing-card" id="processingCard" style="display: none;">
+      <div class="processing-header">
+        <div class="processing-status-group">
+          <span class="status-pill status-processing" id="analysisStatusPill">PROCESSING</span>
+          <span class="processing-title" id="processingTitle">IntelliWatch is analyzing the scene...</span>
+        </div>
+        <span class="processing-pct" id="processingPct">0%</span>
+      </div>
+
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="analysisProgressBar" style="width: 0%;"></div>
+      </div>
+
+      <div class="processing-telemetry-grid" id="processingTelemetryGrid">
+        <div class="telemetry-box">
+          <span class="telemetry-lbl">FILE</span>
+          <span class="telemetry-val" id="telFile">--</span>
+        </div>
+        <div class="telemetry-box">
+          <span class="telemetry-lbl">FRAMES</span>
+          <span class="telemetry-val" id="telFrames">0 / 0</span>
+        </div>
+        <div class="telemetry-box">
+          <span class="telemetry-lbl">FPS</span>
+          <span class="telemetry-val highlight" id="telFps">-- FPS</span>
+        </div>
+        <div class="telemetry-box">
+          <span class="telemetry-lbl">CURRENT RISK</span>
+          <span class="telemetry-val" id="telRisk">INFO</span>
+        </div>
+        <div class="telemetry-box">
+          <span class="telemetry-lbl">ACTIVE TRACKS</span>
+          <span class="telemetry-val" id="telTracks">0</span>
+        </div>
+        <div class="telemetry-box">
+          <span class="telemetry-lbl">INCIDENTS</span>
+          <span class="telemetry-val danger" id="telIncidents">0</span>
+        </div>
+      </div>
+
+      <div class="processing-notice" id="processingNotice" style="display: none;"></div>
+    </div>
+  </section>
+
+  <!-- MAIN DASHBOARD GRID -->
+  <main class="dashboard-grid">
+
+    <!-- LEFT: SCENE & VIDEO VIEWER -->
+    <section class="panel scene-viewer-panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span>Perception & Tracking Viewport</span>
+          <span style="font-size: 9px; color: var(--text-muted); font-family: var(--font-mono);" id="viewportStateBadge">[NO ACTIVE SCENE - IDLE]</span>
+        </div>
+        <div style="font-size: 10px; color: var(--text-muted); font-family: var(--font-mono); display: flex; align-items: center; gap: 6px;">
+          <span>CAM:</span>
+          <select id="viewportCameraSelect" style="background: rgba(0,0,0,0.6); color: #fff; border: 1px solid var(--border-color); border-radius: 4px; padding: 2px 6px; font-size: 11px;">
+            <option value="cam_01">cam_01 (Default)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="viewport-container" id="viewportContainer">
+        <canvas id="sceneCanvas" width="1280" height="720"></canvas>
+        <img id="viewportImage" alt="Annotated Scene Result" style="display: none;" />
+        <img id="viewportLiveStream" alt="Live Camera Feed" style="display: none;" />
+        <video id="viewportVideo" controls autoplay loop style="display: none;"></video>
+        <canvas id="zoneOverlayCanvas" class="zone-overlay-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;"></canvas>
+        <div id="viewportCompletedSummary" class="viewport-summary-card" style="display: none;">
+          <div class="summary-badge">ANALYSIS COMPLETE</div>
+          <div class="summary-grid">
+            <div><span>Total Frames:</span> <strong id="sumTotalFrames">0</strong></div>
+            <div><span>Processed Frames:</span> <strong id="sumProcessedFrames">0</strong></div>
+            <div><span>Average FPS:</span> <strong id="sumAvgFps">0.0</strong></div>
+            <div><span>Average Latency:</span> <strong id="sumAvgLatency">0.0 ms</strong></div>
+            <div><span>Total Incidents:</span> <strong id="sumIncidents" style="color: #ef4444;">0</strong></div>
+            <div><span>Highest Risk:</span> <strong id="sumRisk">INFO</strong></div>
+          </div>
+          <button class="btn btn-sm btn-primary" id="viewIncidentsBtn" type="button">View Incidents ↓</button>
+        </div>
+      </div>
+
+
+      <div class="viewport-controls">
+        <div class="legend-bar">
+          <div class="legend-item">
+            <span class="legend-color" style="background: #3b82f6;"></span>
+            <span>Worker</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color" style="background: #f59e0b;"></span>
+            <span>Vehicle / Forklift</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color" style="background: #8b5cf6;"></span>
+            <span>Machinery</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color" style="background: #06b6d4;"></span>
+            <span>Infrastructure</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color" style="background: rgba(239, 68, 68, 0.4); border: 1px solid #ef4444;"></span>
+            <span>Restricted Zone</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color" style="background: #34d399;"></span>
+            <span>Compliant</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color" style="background: #ef4444;"></span>
+            <span>Violation</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: MULTI-TAB INTELLIGENCE CONSOLE -->
+    <aside class="panel intelligence-panel">
+      <div class="tabs-header">
+        <button class="tab-btn active" data-tab="tab-alerts" id="tabAlertsBtn">🚨 Safety Alerts <span class="badge danger" id="alertTabBadge" style="display:none; font-size:9px; padding:1px 5px; margin-left:4px;">0</span></button>
+
+        <button class="tab-btn" data-tab="tab-scene">Scene Graph</button>
+        <button class="tab-btn" data-tab="tab-risk">Risk &amp; Events</button>
+        <button class="tab-btn" data-tab="tab-ppe">PPE Compliance</button>
+        <button class="tab-btn" data-tab="tab-behavior">Behavior &amp; Depth</button>
+        <button class="tab-btn" data-tab="tab-temporal">Temporal Intel</button>
+        <button class="tab-btn" data-tab="tab-zones" id="tabZonesBtn">Safety Zones</button>
+        <button class="tab-btn" data-tab="tab-analytics" id="tabAnalyticsBtn">Safety Analytics</button>
+        <button class="tab-btn calibration-tab-btn" data-tab="tab-calibration" id="tabCalibrationBtn">Camera Calibration</button>
+        <button class="tab-btn admin-only" data-tab="tab-users" id="tabUsersBtn">👥 Users</button>
+        <button class="tab-btn admin-only" data-tab="tab-audit" id="tabAuditBtn">📜 Audit Logs</button>
+        <button class="tab-btn" data-tab="tab-diagnostics" id="tabDiagnosticsBtn">⚙️ Diagnostics &amp; Accuracy</button>
+      </div>
+
+      <div class="panel-body">
+
+        <!-- TAB 0: STEP 22 SAFETY ALERTS & LIFECYCLE FEED -->
+        <div class="tab-content active" id="tab-alerts">
+          <!-- Alert Summary KPI Cards -->
+          <div class="alert-kpi-grid">
+            <div class="alert-kpi-card">
+              <span class="alert-kpi-val" id="kpiAlertsTotal">0</span>
+              <span class="alert-kpi-lbl">TOTAL</span>
+            </div>
+            <div class="alert-kpi-card new-alerts">
+              <span class="alert-kpi-val" id="kpiAlertsNew">0</span>
+              <span class="alert-kpi-lbl">NEW</span>
+            </div>
+            <div class="alert-kpi-card ack">
+              <span class="alert-kpi-val" id="kpiAlertsAck">0</span>
+              <span class="alert-kpi-lbl">ACK'D</span>
+            </div>
+            <div class="alert-kpi-card critical">
+              <span class="alert-kpi-val" id="kpiAlertsCritical">0</span>
+              <span class="alert-kpi-lbl">CRITICAL</span>
+            </div>
+          </div>
+
+          <!-- Alert Filters & Search Bar -->
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; background: rgba(0,0,0,0.25); padding: 6px; border-radius: 4px; border: 1px solid var(--border-color);">
+            <select id="alertFilterStatus" style="flex: 1; min-width: 80px; background: #0f172a; border: 1px solid var(--border-color); color: #f8fafc; font-size: 10px; padding: 4px 6px; border-radius: 4px;">
+              <option value="">All Statuses</option>
+              <option value="NEW">New (Active)</option>
+              <option value="ACKNOWLEDGED">Acknowledged</option>
+              <option value="RESOLVED">Resolved</option>
+              <option value="DISMISSED">Dismissed</option>
+            </select>
+            <select id="alertFilterSeverity" style="flex: 1; min-width: 80px; background: #0f172a; border: 1px solid var(--border-color); color: #f8fafc; font-size: 10px; padding: 4px 6px; border-radius: 4px;">
+              <option value="">All Severities</option>
+              <option value="CRITICAL">Critical</option>
+              <option value="HIGH">High</option>
+              <option value="MEDIUM">Medium</option>
+              <option value="LOW">Low</option>
+            </select>
+            <input type="text" id="alertFilterSearch" placeholder="Search violation or ID..." style="flex: 1.5; min-width: 100px; background: #0f172a; border: 1px solid var(--border-color); color: #f8fafc; font-size: 10px; padding: 4px 6px; border-radius: 4px;" />
+            <button class="btn btn-sm btn-primary" id="refreshAlertsBtn" type="button" style="padding: 4px 8px; font-size: 10px;">↺</button>
+          </div>
+
+          <!-- Alerts Feed List Container -->
+          <div id="alertsFeedList" style="display: flex; flex-direction: column; gap: 6px; max-height: 430px; overflow-y: auto;">
+            <div style="color: var(--text-muted); font-size: 11px; padding: 20px; text-align: center;">
+              Loading safety alerts...
+            </div>
+          </div>
+
+          <!-- Pagination Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--border-color); font-size: 10px; color: var(--text-muted);">
+            <button class="btn btn-sm" id="alertPrevPageBtn" disabled type="button" style="padding: 2px 8px; font-size: 10px;">◀ Prev</button>
+            <span id="alertPageInfo">Page 1 of 1</span>
+            <button class="btn btn-sm" id="alertNextPageBtn" disabled type="button" style="padding: 2px 8px; font-size: 10px;">Next ▶</button>
+          </div>
+        </div>
+
+        <!-- TAB 1: SCENE UNDERSTANDING -->
+        <div class="tab-content" id="tab-scene">
+          <div id="entitySummaryList"></div>
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin: 10px 0 6px;">
+            Directional Scene Relationships
+          </div>
+          <div class="relationship-list" id="sceneRelationshipsList">
+            <div style="color: var(--text-muted); font-size: 11px; padding: 8px; text-align: center;">
+              Loading scene relationships...
+            </div>
+          </div>
+        </div>
+        <!-- TAB 2: RISK & REASONING -->
+        <div class="tab-content" id="tab-risk">
+          <div id="safetyEventContainer"></div>
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">
+            Active Safety Assessment
+          </div>
+          <div id="riskContainer">
+            <div style="color: var(--text-muted); font-size: 11px; padding: 8px;">
+              Loading risk assessment...
+            </div>
+          </div>
+
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-top: 8px;">
+            Early-Warning Indicators
+          </div>
+          <div id="warningContainer">
+            <div style="color: var(--text-muted); font-size: 11px; padding: 8px;">
+              No predictive warnings active.
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: PPE COMPLIANCE -->
+        <div class="tab-content" id="tab-ppe">
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">
+            Worker PPE Inventory & Compliance Status
+          </div>
+          <div id="ppeContainer" style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="color: var(--text-muted); font-size: 11px; padding: 8px;">
+              Awaiting worker compliance telemetry...
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: BEHAVIOR & DEPTH -->
+        <div class="tab-content" id="tab-behavior">
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">
+            Observed Temporal Behaviors
+          </div>
+          <div id="behaviorContainer" style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="color: var(--text-muted); font-size: 11px; padding: 8px;">
+              Awaiting behavior analysis...
+            </div>
+          </div>
+
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-top: 8px;">
+            Spatial Perception Disclosures
+          </div>
+          <div id="depthContainer"></div>
+        </div>
+
+        <!-- TAB 5: TEMPORAL INTELLIGENCE -->
+        <div class="tab-content" id="tab-temporal">
+          <!-- Entity Profiles -->
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">
+            Entity Temporal Profiles
+          </div>
+          <div id="temporalEntityProfiles" style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="color: var(--text-muted); font-size: 11px; padding: 8px; text-align: center;">
+              Awaiting temporal intelligence data...
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-top: 10px; margin-bottom: 4px;">
+            State Transition Timeline
+          </div>
+          <div id="temporalTimeline" class="temporal-timeline-list">
+            <div style="color: var(--text-muted); font-size: 11px; padding: 8px; text-align: center;">
+              No transitions recorded yet.
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 6: SAFETY ZONES CONFIGURATION -->
+        <div class="tab-content" id="tab-zones">
+          <div class="zone-config-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">
+              Scene Configuration
+            </div>
+            <button class="btn btn-sm btn-primary" id="startDrawZoneBtn" type="button">+ Draw Zone</button>
+          </div>
+
+          <!-- ACTIVE DRAWING TOOLBAR & FORM -->
+          <div class="zone-draw-form" id="zoneDrawForm" style="display: none; margin-bottom: 12px; padding: 10px; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span id="zoneFormTitle" style="font-size: 11px; font-weight: 700; color: #38bdf8;">NEW SAFETY ZONE</span>
+              <span class="badge" id="zonePointCountBadge" style="font-size: 9px; background: #334155; color: #93c5fd;">0 points</span>
+            </div>
+
+            <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.4;">
+              Click on the viewport image/video above to place polygon vertices. Min 3 points required.
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div>
+                <label style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 2px;">Zone Name *</label>
+                <input type="text" id="zoneNameInput" placeholder="e.g. High Voltage Switchgear Area" style="width: 100%; box-sizing: border-box; background: #0f172a; border: 1px solid var(--border-color); color: #f8fafc; padding: 6px; border-radius: 4px; font-size: 11px;" />
+              </div>
+
+              <div style="display: flex; gap: 8px;">
+                <div style="flex: 1;">
+                  <label style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 2px;">Zone Type *</label>
+                  <select id="zoneTypeSelect" style="width: 100%; box-sizing: border-box; background: #0f172a; border: 1px solid var(--border-color); color: #f8fafc; padding: 6px; border-radius: 4px; font-size: 11px;">
+                    <option value="restricted">Restricted Zone</option>
+                    <option value="hazard">Hazard Zone</option>
+                    <option value="machine">Machine Zone</option>
+                    <option value="safety">Safety Zone</option>
+                    <option value="monitored">Monitored Zone</option>
+                  </select>
+                </div>
+                <div style="width: 100px;">
+                  <label style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 2px;">Max Dwell (s)</label>
+                  <input type="number" id="zoneDwellInput" placeholder="10.0" min="0" step="1" style="width: 100%; box-sizing: border-box; background: #0f172a; border: 1px solid var(--border-color); color: #f8fafc; padding: 6px; border-radius: 4px; font-size: 11px;" />
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 6px; margin-top: 4px;">
+                <button class="btn btn-sm btn-primary" id="saveZoneBtn" type="button" style="flex: 1;">✓ Save Zone</button>
+                <button class="btn btn-sm" id="clearPointsBtn" type="button">↺ Clear</button>
+                <button class="btn btn-sm btn-danger" id="cancelDrawBtn" type="button">✕ Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- EXISTING ZONES LIST -->
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">
+            Configured Safety Zones (<span id="configuredZoneCount">0</span>)
+          </div>
+          <div id="configuredZonesList" style="display: flex; flex-direction: column; gap: 6px; max-height: 380px; overflow-y: auto;">
+            <div style="color: var(--text-muted); font-size: 11px; padding: 8px; text-align: center;">
+              Loading safety zones...
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 7: SAFETY ANALYTICS (STEP 17) -->
+        <div class="tab-content" id="tab-analytics">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">
+              Operational Safety Analytics
+            </div>
+            <button class="btn btn-sm" id="refreshAnalyticsBtn" type="button" style="padding: 2px 8px; font-size: 10px;">↺ Refresh</button>
+          </div>
+
+          <!-- KPI Metric Cards Grid -->
+          <div class="analytics-kpi-grid">
+            <div class="analytics-kpi-card">
+              <span class="analytics-kpi-val" id="kpiTotalIncidents">0</span>
+              <span class="analytics-kpi-lbl">TOTAL INCIDENTS</span>
+            </div>
+            <div class="analytics-kpi-card danger">
+              <span class="analytics-kpi-val" id="kpiCriticalIncidents" style="color: #ef4444;">0</span>
+              <span class="analytics-kpi-lbl">CRITICAL / HIGH</span>
+            </div>
+            <div class="analytics-kpi-card warning">
+              <span class="analytics-kpi-val" id="kpiZoneIntrusions" style="color: #f59e0b;">0</span>
+              <span class="analytics-kpi-lbl">ZONE INTRUSIONS</span>
+            </div>
+            <div class="analytics-kpi-card info">
+              <span class="analytics-kpi-val" id="kpiPpeViolations" style="color: #38bdf8;">0</span>
+              <span class="analytics-kpi-lbl">PPE VIOLATIONS</span>
+            </div>
+          </div>
+
+          <!-- Secondary Metrics -->
+          <div style="display: flex; gap: 8px; margin-top: 6px;">
+            <div class="analytics-stat-pill">
+              <span>Avg Duration:</span> <strong id="kpiAvgDuration">-- s</strong>
+            </div>
+            <div class="analytics-stat-pill">
+              <span>Active Now:</span> <strong id="kpiActiveIncidents" style="color: #10b981;">0</strong>
+            </div>
+            <div class="analytics-stat-pill">
+              <span>Vehicle/Machine:</span> <strong id="kpiProximityEvents">0</strong>
+            </div>
+          </div>
+
+          <!-- Incident Frequency by Category -->
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-top: 10px; margin-bottom: 4px;">
+            Event Type Distribution
+          </div>
+          <div id="analyticsEventTypeDist" style="display: flex; flex-direction: column; gap: 4px; max-height: 140px; overflow-y: auto;">
+            <div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 8px;">Awaiting incident history...</div>
+          </div>
+
+          <!-- Most Active Zones -->
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-top: 10px; margin-bottom: 4px;">
+            Most Active Restricted Zones
+          </div>
+          <div id="analyticsActiveZonesList" style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 8px;">No zone violations logged.</div>
+          </div>
+
+          <!-- Ethical Disclosure Banner -->
+          <div class="analytics-notice" style="margin-top: 8px; font-size: 9px; color: var(--text-muted); line-height: 1.4; border-top: 1px solid var(--border-color); padding-top: 6px;">
+            <span style="color: #93c5fd; font-weight: 600;">Technical Disclosure:</span> Strictly descriptive event statistics derived from verified system state. Zero employee ranking, profiling, or subjective performance evaluations.
+          </div>
+        </div>
+
+        <!-- TAB 8: USER MANAGEMENT (ADMIN ONLY) -->
+        <div class="tab-content" id="tab-users">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">
+              User Accounts &amp; RBAC Control
+            </div>
+            <button class="btn btn-sm btn-primary" id="createUserModalBtn" type="button">+ Create User</button>
+          </div>
+
+          <!-- Users Table Container -->
+          <div style="max-height: 400px; overflow-y: auto;">
+            <table class="auth-table" style="width: 100%; border-collapse: collapse; font-size: 10px;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); text-align: left;">
+                  <th style="padding: 6px 4px;">Username</th>
+                  <th style="padding: 6px 4px;">Role</th>
+                  <th style="padding: 6px 4px;">Status</th>
+                  <th style="padding: 6px 4px;">Permitted Cameras</th>
+                  <th style="padding: 6px 4px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="userTableBody">
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 16px; color: var(--text-muted);">Loading users...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 9: AUDIT LOGS (ADMIN ONLY) -->
+        <div class="tab-content" id="tab-audit">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">
+              Security &amp; Operational Audit Trail
+            </div>
+            <button class="btn btn-sm btn-primary" id="refreshAuditBtn" type="button">↺ Refresh</button>
+          </div>
+
+          <!-- Audit Filters -->
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; background: rgba(0,0,0,0.25); padding: 6px; border-radius: 4px; border: 1px solid var(--border-color);">
+            <select id="auditFilterEvent" style="flex: 1; min-width: 90px; background: #0f172a; border: 1px solid var(--border-color); color: #f8fafc; font-size: 10px; padding: 4px; border-radius: 4px;">
+              <option value="">All Events</option>
+              <option value="LOGIN_SUCCESS">Login Success</option>
+              <option value="LOGIN_FAILURE">Login Failure</option>
+              <option value="USER_CREATED">User Created</option>
+              <option value="USER_UPDATED">User Updated</option>
+              <option value="USER_DELETED">User Deleted</option>
+              <option value="CAMERA_UPDATED">Camera Action</option>
+              <option value="ALERT_ACKNOWLEDGED">Alert Ack</option>
+              <option value="ALERT_RESOLVED">Alert Resolved</option>
+              <option value="ALERT_DISMISSED">Alert Dismissed</option>
+              <option value="ACCESS_DENIED">Access Denied</option>
+            </select>
+            <select id="auditFilterOutcome" style="width: 80px; background: #0f172a; border: 1px solid var(--border-color); color: #f8fafc; font-size: 10px; padding: 4px; border-radius: 4px;">
+              <option value="">All Outcomes</option>
+              <option value="SUCCESS">Success</option>
+              <option value="FAILURE">Failure</option>
+              <option value="DENIED">Denied</option>
+            </select>
+            <input type="text" id="auditFilterActor" placeholder="Actor..." style="width: 70px; background: #0f172a; border: 1px solid var(--border-color); color: #f8fafc; font-size: 10px; padding: 4px; border-radius: 4px;" />
+            <button class="btn btn-sm btn-primary" id="applyAuditFiltersBtn" type="button" style="padding: 4px 8px; font-size: 10px;">Filter</button>
+          </div>
+
+          <!-- Audit Log List -->
+          <div id="auditLogList" style="display: flex; flex-direction: column; gap: 4px; max-height: 380px; overflow-y: auto;">
+            <div style="color: var(--text-muted); font-size: 11px; padding: 16px; text-align: center;">
+              Loading audit logs...
+            </div>
+          </div>
+
+          <!-- Audit Pagination -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--border-color); font-size: 10px; color: var(--text-muted);">
+            <button class="btn btn-sm" id="auditPrevPageBtn" disabled type="button" style="padding: 2px 8px; font-size: 10px;">◀ Prev</button>
+            <span id="auditPageInfo">Page 1 of 1</span>
+            <button class="btn btn-sm" id="auditNextPageBtn" disabled type="button" style="padding: 2px 8px; font-size: 10px;">Next ▶</button>
+          </div>
+        </div>
+
+        <!-- TAB: MODEL ACCURACY & OPERATOR DIAGNOSTICS (STEP 12 & 13) -->
+        <div class="tab-content" id="tab-diagnostics">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+            <div>
+              <strong style="color: var(--text-primary); font-size: 13px;">ENGINEERING &amp; OPERATOR DIAGNOSTICS</strong>
+              <div style="color: var(--text-muted); font-size: 10px;">Empirical Benchmark &amp; Real Hardware Telemetry</div>
+            </div>
+            <button class="btn btn-sm btn-primary" id="refreshDiagnosticsBtn" type="button" style="font-size: 10px; padding: 4px 8px;">🔄 Refresh Metrics</button>
+          </div>
+
+          <!-- Hardware Diagnostics Card -->
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; margin-bottom: 12px; font-size: 11px;">
+            <div style="color: var(--color-info); font-weight: 700; font-size: 11px; margin-bottom: 4px;">HARDWARE &amp; RUNTIME STATUS</div>
+            <div style="display: grid; grid-template-columns: 120px 1fr; gap: 4px; color: var(--text-secondary);">
+              <div>Inference Device:</div><strong id="diagDevice" style="color: #f8fafc;">CPU Fallback Active</strong>
+              <div>Host GPU:</div><span id="diagGpu">NVIDIA GeForce RTX 5050 Laptop GPU</span>
+              <div>Compute Status:</div><span id="diagGpuNotice" style="color: #f59e0b; font-size: 10px;">CC 12.0 (sm_120) requires CUDA 13.0+; automatic CPU fallback protecting stability</span>
+              <div>Average Latency:</div><strong id="diagLatency" style="color: #38bdf8;">-- ms</strong>
+              <div>Effective FPS:</div><strong id="diagFps" style="color: #34d399;">-- FPS</strong>
+            </div>
+          </div>
+
+          <!-- Viewport & Scene Rendering Debug Diagnostics Card -->
+          <div id="viewportDebugCard" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; margin-bottom: 12px; font-size: 11px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="color: #38bdf8; font-weight: 700; font-size: 11px;">VIEWPORT &amp; DETECTION DIAGNOSTICS</span>
+              <span style="font-size: 9px; color: var(--text-muted); background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.3); padding: 1px 5px; border-radius: 3px;">Active Telemetry</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 140px 1fr; gap: 4px; color: var(--text-secondary);">
+              <div>Source Dimensions:</div><strong id="dbgSourceDim" style="color: #f8fafc;">-- x --</strong>
+              <div>Viewport Dimensions:</div><span id="dbgViewportDim" style="color: #f8fafc;">-- x --</span>
+              <div>Displayed Media:</div><span id="dbgDisplayedDim" style="color: #34d399;">-- x --</span>
+              <div>Scale Factor:</div><span id="dbgScaleFactor" style="color: #f8fafc;">--</span>
+              <div>Letterbox Offset:</div><span id="dbgLetterboxOffset" style="color: #f8fafc;">--</span>
+              <div>Raw Person Count:</div><strong id="dbgRawPersons" style="color: #fbbf24;">--</strong>
+              <div>Filtered Person Count:</div><strong id="dbgFilteredPersons" style="color: #34d399;">--</strong>
+              <div>Active Track Count:</div><strong id="dbgTrackCount" style="color: #38bdf8;">--</strong>
+              <div>Rendered Boxes:</div><strong id="dbgRenderedBoxes" style="color: #34d399;">--</strong>
+            </div>
+          </div>
+
+          <!-- Empirical Model Accuracy Card -->
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; margin-bottom: 12px; font-size: 11px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="color: var(--color-low); font-weight: 700; font-size: 11px;">EMPIRICAL VALIDATION METRICS (HELD-OUT TEST SET)</span>
+              <span style="font-size: 9px; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 1px 5px; border-radius: 3px;">Zero Fabricated Data</span>
+            </div>
+            <table style="width: 100%; border-collapse: collapse; font-size: 10px; text-align: left;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
+                  <th style="padding: 4px 2px;">TARGET</th>
+                  <th style="padding: 4px 2px;">PRECISION</th>
+                  <th style="padding: 4px 2px;">RECALL</th>
+                  <th style="padding: 4px 2px;">F1</th>
+                  <th style="padding: 4px 2px;">mAP@50</th>
+                </tr>
+              </thead>
+              <tbody id="diagMetricsTable">
+                <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 8px;">Loading evaluation metrics...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Multi-Candidate Model Benchmark Table -->
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; margin-bottom: 8px; font-size: 11px;">
+            <div style="color: var(--text-primary); font-weight: 700; font-size: 11px; margin-bottom: 6px;">CANDIDATE ARCHITECTURE COMPARISON</div>
+            <table style="width: 100%; border-collapse: collapse; font-size: 9px; text-align: left;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
+                  <th style="padding: 3px 2px;">MODEL</th>
+                  <th style="padding: 3px 2px;">P-REC</th>
+                  <th style="padding: 3px 2px;">H-REC</th>
+                  <th style="padding: 3px 2px;">V-REC</th>
+                  <th style="padding: 3px 2px;">LATENCY</th>
+                  <th style="padding: 3px 2px;">STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="diagBenchmarkTable">
+                <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 8px;">Loading benchmark comparisons...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Link to Full Validation Dashboard -->
+          <a href="/eval" target="_blank" rel="noopener" style="
+            display: flex; align-items: center; justify-content: space-between;
+            background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(34,211,238,0.06));
+            border: 1px solid rgba(108,99,255,0.35); border-radius: 8px;
+            padding: 10px 14px; text-decoration: none; color: #c4b5fd;
+            font-size: 11px; font-weight: 600; margin-top: 4px;
+            transition: border-color .2s, background .2s;
+          " onmouseover="this.style.borderColor='rgba(108,99,255,0.7)'; this.style.background='linear-gradient(135deg,rgba(108,99,255,0.2),rgba(34,211,238,0.1))'" onmouseout="this.style.borderColor='rgba(108,99,255,0.35)'; this.style.background='linear-gradient(135deg,rgba(108,99,255,0.12),rgba(34,211,238,0.06))'">
+            <span>🔬 View Full AI Validation Dashboard</span>
+            <span style="opacity:.7; font-size:10px;">opens in new tab →</span>
+          </a>
+        </div>
+
+        <!-- STAGE 6B: CAMERA-SCOPED GROUND-PLANE CALIBRATION WORKBENCH -->
+        <div class="tab-content" id="tab-calibration">
+          <section class="calibration-workbench" aria-labelledby="calibrationWorkbenchTitle">
+            <header class="calibration-workbench-heading">
+              <div>
+                <div class="calibration-kicker">CAMERA GEOMETRY / GROUND PLANE</div>
+                <h2 id="calibrationWorkbenchTitle">Camera Calibration</h2>
+                <p>Map a known ground-plane rectangle for one registered camera.</p>
+              </div>
+              <span class="calibration-scope-tag">CAMERA-SCOPED</span>
+            </header>
+
+            <div class="calibration-camera-row">
+              <label for="calibrationCameraSelect">REGISTERED CAMERA</label>
+              <select id="calibrationCameraSelect" disabled>
+                <option value="">Loading registered cameras...</option>
+              </select>
+              <span class="calibration-state-chip" id="calibrationCameraStatus">--</span>
+              <span class="calibration-state-chip" id="calibrationStatusBadge">NOT LOADED</span>
+            </div>
+
+            <div class="calibration-layout">
+              <section class="calibration-frame-panel" aria-label="Calibration image point selector">
+                <div class="calibration-frame-heading">
+                  <div>
+                    <strong id="calibrationSelectedCameraLabel">Select a registered camera</strong>
+                    <span id="calibrationFrameDimensions">SOURCE IMAGE: -- × -- PX</span>
+                  </div>
+                  <button class="btn btn-sm" id="calibrationRefreshFrameBtn" type="button" disabled>Refresh frame</button>
+                </div>
+                <div class="calibration-image-stage" id="calibrationImageStage">
+                  <div class="calibration-image-empty" id="calibrationImageEmpty">
+                    <span class="calibration-image-crosshair" aria-hidden="true">＋</span>
+                    <strong id="calibrationImageEmptyTitle">Choose a camera to load its frame</strong>
+                    <span id="calibrationImageEmptyHint">A current frame or backend reference image will appear here.</span>
+                  </div>
+                  <div class="calibration-image-layer" id="calibrationImageLayer" hidden>
+                    <img id="calibrationFrameImage" alt="Selected camera calibration frame" draggable="false" />
+                    <svg id="calibrationPointOverlay" aria-hidden="true" preserveAspectRatio="none">
+                      <polygon id="calibrationPointPolygon" class="calibration-point-polygon"></polygon>
+                      <polyline id="calibrationPointLine" class="calibration-point-line"></polyline>
+                      <g id="calibrationPointMarkers"></g>
+                    </svg>
+                  </div>
+                </div>
+                <div class="calibration-frame-caption">
+                  <span>Snapshot endpoint; an offline stream may use the backend reference frame.</span>
+                  <span id="calibrationPointCount">0 / 4 POINTS</span>
+                </div>
+                <p class="calibration-image-instruction">Click to place points in order. Drag a numbered point to reposition it.</p>
+              </section>
+
+              <section class="calibration-controls-panel" aria-label="Calibration controls">
+                <div class="calibration-section-label">GROUND RECTANGLE</div>
+                <p class="calibration-helper">Select four corners on the ground plane in order: P1, P2, P3, P4. Use a known rectangular area; backend validation checks the geometry.</p>
+
+                <ol class="calibration-point-list" id="calibrationPointList" aria-label="Selected calibration points">
+                  <li><b>P1</b><span>Awaiting point</span></li>
+                  <li><b>P2</b><span>Awaiting point</span></li>
+                  <li><b>P3</b><span>Awaiting point</span></li>
+                  <li><b>P4</b><span>Awaiting point</span></li>
+                </ol>
+
+                <div class="calibration-dimension-heading">
+                  <div class="calibration-section-label">KNOWN DIMENSIONS</div>
+                  <span>METERS</span>
+                </div>
+                <p class="calibration-helper">Measure the physical rectangle: width P1-P2 and depth P1-P4.</p>
+                <div class="calibration-dimension-grid">
+                  <label for="calibrationWidthInput">WIDTH <span>(m)</span>
+                    <input id="calibrationWidthInput" type="number" min="0.05" max="500" step="any" inputmode="decimal" placeholder="e.g. 8.0" disabled />
+                  </label>
+                  <label for="calibrationDepthInput">DEPTH <span>(m)</span>
+                    <input id="calibrationDepthInput" type="number" min="0.05" max="500" step="any" inputmode="decimal" placeholder="e.g. 12.0" disabled />
+                  </label>
+                </div>
+
+                <div class="calibration-save-summary" id="calibrationSaveSummary">Select a camera and four points to prepare a calibration.</div>
+                <div class="calibration-action-row">
+                  <button class="btn btn-sm" id="calibrationResetPointsBtn" type="button" disabled>Reset points</button>
+                  <button class="btn btn-sm" id="calibrationValidateBtn" type="button" disabled>Validate</button>
+                  <button class="btn btn-sm btn-primary" id="calibrationSaveBtn" type="button" disabled>Save calibration</button>
+                  <button class="btn btn-sm btn-danger" id="calibrationClearBtn" type="button" disabled>Clear</button>
+                </div>
+                <div class="calibration-feedback" id="calibrationFeedback" role="status" aria-live="polite"></div>
+                <div class="calibration-validation-result" id="calibrationValidationResult" aria-live="polite"></div>
+              </section>
+            </div>
+
+            <section class="calibration-scene-context" aria-label="Scene metric context">
+              <div>
+                <div class="calibration-section-label">CURRENT SCENE / METRIC CONTEXT</div>
+                <strong id="calibrationSceneMetricContext">Scene context not loaded.</strong>
+              </div>
+              <p>A scene uses calibration only for its stored source camera. <code>GROUND_PLANE_APPROXIMATION</code> may provide approximate metric outputs; <code>IMAGE_SPACE</code> means metric fields may be unavailable. Calibration alone does not guarantee every metric.</p>
+            </section>
+          </section>
+        </div>
+
+
+
+      </div>
+    </aside>
+
+
+    <!-- BOTTOM: INCIDENT EVIDENCE TIMELINE -->
+    <section class="panel incident-panel">
+      <div class="panel-header" style="flex-wrap: wrap; gap: 8px;">
+        <div class="panel-title">
+          <span>Incident Evidence Timeline</span>
+          <span style="font-size: 9px; color: var(--text-muted); font-family: var(--font-mono);">[CONFIRMED HAZARDS]</span>
+        </div>
+
+        <!-- STEP 17: INCIDENT EVENT FILTERS -->
+        <div class="incident-filters-bar" style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+          <select id="filterRiskTier" style="background: #0f172a; border: 1px solid var(--border-color); color: #f8fafc; font-size: 10px; padding: 3px 6px; border-radius: 4px;">
+            <option value="">All Risk Tiers</option>
+            <option value="CRITICAL">Critical</option>
+            <option value="HIGH">High</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="LOW">Low</option>
+            <option value="INFO">Info</option>
+          </select>
+          <select id="filterEventType" style="background: #0f172a; border: 1px solid var(--border-color); color: #f8fafc; font-size: 10px; padding: 3px 6px; border-radius: 4px;">
+            <option value="">All Event Types</option>
+            <option value="RESTRICTED_ZONE_INTRUSION">Zone Intrusion</option>
+            <option value="RESTRICTED_ZONE_DWELL">Zone Dwell</option>
+            <option value="PPE_VIOLATION">PPE Violation</option>
+            <option value="PERSON_VEHICLE_PROXIMITY">Vehicle Proximity</option>
+            <option value="APPROACHING_VEHICLE">Approaching Vehicle</option>
+            <option value="WORKER_MACHINE_RISK">Machine Risk</option>
+            <option value="FALL_LIKE_EVENT">Fall-Like Condition</option>
+            <option value="RAPID_MOVEMENT_EVENT">Rapid Movement</option>
+            <option value="COMPOUND_SAFETY_EVENT">Compound Event</option>
+          </select>
+          <input type="number" id="filterTrackId" placeholder="Track #" style="width: 60px; background: #0f172a; border: 1px solid var(--border-color); color: #f8fafc; font-size: 10px; padding: 3px 6px; border-radius: 4px;" />
+          <input type="text" id="filterZone" placeholder="Zone..." style="width: 80px; background: #0f172a; border: 1px solid var(--border-color); color: #f8fafc; font-size: 10px; padding: 3px 6px; border-radius: 4px;" />
+          <button class="btn btn-sm btn-primary" id="applyFiltersBtn" type="button" style="padding: 2px 8px; font-size: 10px;">Filter</button>
+          <button class="btn btn-sm" id="resetFiltersBtn" type="button" style="padding: 2px 6px; font-size: 10px;" title="Reset filters">↺</button>
+        </div>
+      </div>
+
+      <div class="incident-table-wrapper">
+        <table class="incident-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Risk Tier</th>
+              <th>Event Type</th>
+              <th>Involved Tracks</th>
+              <th>Deterministic Explanation</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="incidentTableBody">
+            <tr>
+              <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 16px;">
+                No safety incident records logged yet.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- STEP 17: ENHANCED EXPLAINABILITY & EVIDENCE INSPECTOR MODAL -->
+  <div class="modal-backdrop" id="evidenceModal">
+    <div class="modal-card" style="max-width: 960px; width: 92%; max-height: 88vh;">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">
+          <span>INCIDENT EVIDENCE &amp; EXPLAINABILITY RECORD</span>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="btn btn-sm btn-primary" id="downloadPackageBtn" type="button" style="padding: 3px 8px; font-size: 10px;">
+            📥 Download Package (.json)
+          </button>
+          <button class="btn" id="closeModalBtn" style="padding: 2px 8px;">✕ Close</button>
+        </div>
+      </div>
+
+      <div class="modal-body" style="grid-template-columns: 1.2fr 1fr; gap: 16px; padding: 16px; overflow-y: auto;">
+
+        <!-- LEFT COLUMN: EVIDENCE IMAGE, RISK TREND, FIVE-W CARD -->
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <!-- Evidence Image -->
+          <div class="evidence-image-container" style="position: relative; min-height: 220px; max-height: 260px;">
+            <img id="modalEvidenceImage" alt="Incident Evidence Snapshot" style="display: none;" />
+            <div class="no-evidence-notice" id="noEvidenceNotice">
+              Metadata-Only Evidence Record: No visual snapshot was captured.
+            </div>
+            <div id="modalEvidenceBadge" class="evidence-snapshot-badge" style="display: none; position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.75); color: #fff; padding: 2px 6px; border-radius: 3px; font-size: 9px; font-family: var(--font-mono);">
+              SNAPSHOT
+            </div>
+          </div>
+
+          <!-- Risk Trend Trajectory Chart -->
+          <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; display: flex; justify-content: space-between;">
+              <span>Risk Trajectory Trend</span>
+              <span id="riskTrendStatus" style="font-size: 9px; font-family: var(--font-mono); color: #94a3b8;">--</span>
+            </div>
+            <div id="riskTrendNotice" style="font-size: 10px; color: var(--text-muted); text-align: center; padding: 12px; display: none;">
+              Insufficient temporal data for trend trajectory.
+            </div>
+            <canvas id="modalRiskTrendCanvas" width="450" height="90" style="width: 100%; height: 90px; display: block;"></canvas>
+          </div>
+
+          <!-- Five-W Explanation Box -->
+          <div class="five-w-container" style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #38bdf8; margin-bottom: 6px;">
+              Structured Five-W Explanation
+            </div>
+            <div class="five-w-grid" style="display: flex; flex-direction: column; gap: 6px; font-size: 11px;">
+              <div><strong style="color: var(--text-muted); font-size: 10px;">WHO:</strong> <span id="fwWho" style="color: #f8fafc;">--</span></div>
+              <div><strong style="color: var(--text-muted); font-size: 10px;">WHAT:</strong> <span id="fwWhat" style="color: #f8fafc;">--</span></div>
+              <div><strong style="color: var(--text-muted); font-size: 10px;">WHERE:</strong> <span id="fwWhere" style="color: #f8fafc;">--</span></div>
+              <div><strong style="color: var(--text-muted); font-size: 10px;">WHEN:</strong> <span id="fwWhen" style="color: #f8fafc; font-family: var(--font-mono);">--</span></div>
+              <div>
+                <strong style="color: var(--text-muted); font-size: 10px;">WHY:</strong>
+                <ul id="fwWhyList" style="padding-left: 16px; margin-top: 3px; color: #93c5fd; font-size: 10px; line-height: 1.4;">
+                  <li>Evaluating risk reasons...</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: RISK BREAKDOWN, TIMELINE, SCENE & EARLY WARNINGS -->
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+
+          <!-- Risk Score Breakdown -->
+          <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">
+              Risk Score Calculation Breakdown
+            </div>
+            <div id="riskBreakdownContent" style="font-size: 10px;">
+              <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <th style="text-align: left; padding: 3px 0;">Risk Factor</th>
+                    <th style="text-align: right; padding: 3px 0;">Weight</th>
+                  </tr>
+                </thead>
+                <tbody id="riskBreakdownBody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+              <div id="riskBreakdownTotal" style="margin-top: 6px; padding-top: 4px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; font-weight: 700;">
+                <span>Total Severity Score:</span>
+                <span id="riskBreakdownFinal" style="color: #f59e0b;">0.0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chronological Incident Progression Timeline -->
+          <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; flex: 1;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">
+              Chronological Incident Progression
+            </div>
+            <div id="modalIncidentTimeline" style="display: flex; flex-direction: column; gap: 4px; max-height: 170px; overflow-y: auto;">
+              <div style="color: var(--text-muted); font-size: 10px; text-align: center; padding: 8px;">Loading timeline...</div>
+            </div>
+          </div>
+
+          <!-- Scene Relationships & Early Warning Indicators -->
+          <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">
+              Scene Graph Relationships &amp; Early Warnings
+            </div>
+            <div id="modalSceneAndWarnings" style="font-size: 10px; color: var(--text-secondary); max-height: 90px; overflow-y: auto;">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 22: ALERT DETAIL, VISUAL EVIDENCE & LIFECYCLE ACTION MODAL -->
+  <div class="modal-backdrop" id="alertDetailModal" style="display: none;">
+    <div class="modal-card" style="max-width: 960px; width: 92%; max-height: 88vh;">
+      <div class="modal-header">
+        <div class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+          <span id="alertModalTitle">SAFETY ALERT RECORD</span>
+          <span class="alert-pill" id="alertModalSeverity">HIGH</span>
+          <span class="alert-status-pill" id="alertModalStatus">NEW</span>
+        </div>
+        <button class="btn" id="closeAlertModalBtn" type="button" style="padding: 2px 8px;">✕ Close</button>
+      </div>
+
+      <div class="modal-body" style="grid-template-columns: 1.2fr 1fr; gap: 16px; padding: 16px; overflow-y: auto;">
+
+        <!-- LEFT: VISUAL EVIDENCE & DETECTION FACTS -->
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <!-- Evidence Image -->
+          <div class="evidence-image-container" style="position: relative; min-height: 240px; max-height: 320px; background: #000; border-radius: 6px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+            <img id="alertEvidenceImage" alt="Visual Evidence Snapshot" style="max-width: 100%; max-height: 320px; object-fit: contain; display: none;" />
+            <div id="alertNoEvidenceNotice" style="color: var(--text-muted); font-size: 11px; padding: 20px; text-align: center;">
+              No visual evidence snapshot available for this alert.
+            </div>
+            <div id="alertEvidenceBadge" style="display: none; position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.8); color: #38bdf8; border: 1px solid #38bdf8; padding: 2px 6px; border-radius: 3px; font-size: 9px; font-family: var(--font-mono);">
+              VISUAL EVIDENCE SNAPSHOT
+            </div>
+          </div>
+
+          <!-- Alert Details Card -->
+          <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">
+              Incident & Perception Telemetry
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 11px;">
+              <div><span style="color: var(--text-muted);">Alert ID:</span> <strong id="alertDetId" style="font-family: var(--font-mono);">--</strong></div>
+              <div><span style="color: var(--text-muted);">Violation:</span> <strong id="alertDetViolation">--</strong></div>
+              <div><span style="color: var(--text-muted);">Camera:</span> <strong id="alertDetCamera">--</strong></div>
+              <div><span style="color: var(--text-muted);">Worker Track:</span> <strong id="alertDetTrack">--</strong></div>
+              <div><span style="color: var(--text-muted);">Confidence:</span> <strong id="alertDetConf">--</strong></div>
+              <div><span style="color: var(--text-muted);">Occurrences:</span> <strong id="alertDetOccurrences">--</strong></div>
+              <div><span style="color: var(--text-muted);">First Detected:</span> <span id="alertDetFirst" style="font-family: var(--font-mono); font-size: 10px;">--</span></div>
+              <div><span style="color: var(--text-muted);">Last Detected:</span> <span id="alertDetLast" style="font-family: var(--font-mono); font-size: 10px;">--</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: AUDIT LIFECYCLE & OPERATOR ACTIONS -->
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <!-- Audit History Timeline -->
+          <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; flex: 1;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">
+              State Transition &amp; Audit Trail
+            </div>
+            <div id="alertHistoryList" style="display: flex; flex-direction: column; gap: 4px; max-height: 200px; overflow-y: auto;">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Operator Action Controls -->
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px;" id="alertActionControls">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">
+              Operator Lifecycle Actions
+            </div>
+
+            <!-- Operator Name Input -->
+            <div style="margin-bottom: 8px;">
+              <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 2px;" for="alertOperatorName">Operator Name / ID</label>
+              <input type="text" id="alertOperatorName" value="operator" style="width: 100%; box-sizing: border-box; background: #0f172a; border: 1px solid var(--border-color); color: #fff; padding: 4px 6px; border-radius: 4px; font-size: 11px;" />
+            </div>
+
+            <!-- Note / Reason Input -->
+            <div style="margin-bottom: 10px;">
+              <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 2px;" for="alertActionNotes">Action Notes / Reason</label>
+              <textarea id="alertActionNotes" rows="2" placeholder="Enter resolution notes, verification comments, or dismissal reason..." style="width: 100%; box-sizing: border-box; background: #0f172a; border: 1px solid var(--border-color); color: #fff; padding: 6px; border-radius: 4px; font-size: 11px; resize: vertical;"></textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div style="display: flex; gap: 6px;">
+              <button class="btn btn-sm btn-primary" id="btnModalAck" type="button" style="flex: 1; padding: 6px;">✓ Acknowledge</button>
+              <button class="btn btn-sm" id="btnModalResolve" type="button" style="flex: 1; background: #16a34a; border-color: #16a34a; color: #fff; padding: 6px;">✓ Resolve</button>
+              <button class="btn btn-sm btn-danger" id="btnModalDismiss" type="button" style="flex: 1; padding: 6px;">✕ Dismiss</button>
+            </div>
+            <div id="alertActionFeedback" style="display: none; font-size: 10px; margin-top: 6px; text-align: center;"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- STEP 23 AUTHENTICATION & USER MANAGEMENT MODALS                          -->
+  <!-- ========================================================================= -->
+
+  <!-- LOGIN MODAL -->
+  <div class="modal-overlay" id="loginModal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(8px);">
+    <div class="modal-dialog" style="background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; width: 360px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="font-size: 28px; margin-bottom: 6px;">🛡️</div>
+        <h2 style="margin: 0 0 4px 0; font-size: 16px; color: #f8fafc; font-weight: 700; letter-spacing: 0.5px;">IntelliWatch Security</h2>
+        <div style="font-size: 11px; color: var(--text-muted);">Industrial Safety & Access Control</div>
+      </div>
+      <form id="loginForm" onsubmit="return false;" style="display: flex; flex-direction: column; gap: 12px;">
+        <div>
+          <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 4px;" for="loginUsername">USERNAME</label>
+          <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username" required style="width: 100%; box-sizing: border-box; background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 8px; border-radius: 4px; font-size: 12px;" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 4px;" for="loginPassword">PASSWORD</label>
+          <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password" required style="width: 100%; box-sizing: border-box; background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 8px; border-radius: 4px; font-size: 12px;" />
+        </div>
+        <div id="loginErrorMsg" style="display: none; font-size: 11px; color: #ef4444; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; padding: 6px; border-radius: 4px;"></div>
+        <button type="submit" class="btn btn-primary" id="loginSubmitBtn" style="padding: 10px; font-size: 12px; font-weight: 600; margin-top: 4px;">AUTHENTICATE</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- CHANGE PASSWORD MODAL -->
+  <div class="modal-overlay" id="changePasswordModal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); z-index: 9998; align-items: center; justify-content: center;">
+    <div class="modal-dialog" style="background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; width: 340px; padding: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h3 style="margin: 0; font-size: 14px; color: #f8fafc;">Change Password</h3>
+        <button class="btn btn-sm" id="closeChangePasswordBtn" style="padding: 2px 6px;">✕</button>
+      </div>
+      <form id="changePasswordForm" onsubmit="return false;" style="display: flex; flex-direction: column; gap: 10px;">
+        <div>
+          <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 2px;">CURRENT PASSWORD</label>
+          <input type="password" id="currentPasswordInput" required style="width: 100%; box-sizing: border-box; background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 6px; border-radius: 4px; font-size: 11px;" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 2px;">NEW PASSWORD (min 8 chars)</label>
+          <input type="password" id="newPasswordInput" minlength="8" required style="width: 100%; box-sizing: border-box; background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 6px; border-radius: 4px; font-size: 11px;" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 2px;">CONFIRM NEW PASSWORD</label>
+          <input type="password" id="confirmPasswordInput" minlength="8" required style="width: 100%; box-sizing: border-box; background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 6px; border-radius: 4px; font-size: 11px;" />
+        </div>
+        <div id="changePasswordMsg" style="display: none; font-size: 10px; padding: 6px; border-radius: 4px;"></div>
+        <button type="submit" class="btn btn-primary" id="savePasswordBtn" style="padding: 8px; margin-top: 4px;">Update Password</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- CREATE USER MODAL (ADMIN ONLY) -->
+  <div class="modal-overlay" id="createUserModal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); z-index: 9998; align-items: center; justify-content: center;">
+    <div class="modal-dialog" style="background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; width: 360px; padding: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h3 style="margin: 0; font-size: 14px; color: #f8fafc;">Create New User</h3>
+        <button class="btn btn-sm" id="closeCreateUserBtn" style="padding: 2px 6px;">✕</button>
+      </div>
+      <form id="createUserForm" onsubmit="return false;" style="display: flex; flex-direction: column; gap: 10px;">
+        <div>
+          <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 2px;">USERNAME *</label>
+          <input type="text" id="createUsernameInput" required style="width: 100%; box-sizing: border-box; background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 6px; border-radius: 4px; font-size: 11px;" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 2px;">ROLE *</label>
+          <select id="createUserRoleSelect" style="width: 100%; box-sizing: border-box; background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 6px; border-radius: 4px; font-size: 11px;">
+            <option value="OPERATOR">Operator</option>
+            <option value="SAFETY_MANAGER">Safety Manager</option>
+            <option value="VIEWER">Read-Only Viewer</option>
+            <option value="ADMIN">Administrator</option>
+          </select>
+        </div>
+        <div>
+          <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 2px;">TEMPORARY PASSWORD * (min 8 chars)</label>
+          <input type="password" id="createPasswordInput" minlength="8" required style="width: 100%; box-sizing: border-box; background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 6px; border-radius: 4px; font-size: 11px;" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 2px;">PERMITTED CAMERAS (comma separated, leave blank for all)</label>
+          <input type="text" id="createPermittedCamerasInput" placeholder="e.g. cam_rtsp_01, cam_rtsp_02" style="width: 100%; box-sizing: border-box; background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 6px; border-radius: 4px; font-size: 11px;" />
+        </div>
+        <div id="createUserMsg" style="display: none; font-size: 10px; padding: 6px; border-radius: 4px;"></div>
+        <button type="submit" class="btn btn-primary" id="saveNewUserBtn" style="padding: 8px; margin-top: 4px;">Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/frontend/js/dashboard.js"></script>
+</body>
+</html>

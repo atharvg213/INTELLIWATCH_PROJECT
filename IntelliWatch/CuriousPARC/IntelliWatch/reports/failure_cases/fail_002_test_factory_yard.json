@@ -1,0 +1,147 @@
+{
+  "failure_id": "fail_002_test_factory_yard",
+  "image_name": "test_factory_yard.jpg",
+  "source_camera": "Facility-Wide-Angle",
+  "model_version": "yolo11n_v1.0 + safetyvision_v1.0",
+  "expected": [
+    {
+      "class": "person",
+      "bbox": [
+        1130.0,
+        394.0,
+        1215.0,
+        614.0
+      ]
+    },
+    {
+      "class": "safety_vest",
+      "bbox": [
+        1152.0,
+        416.0,
+        1216.0,
+        507.0
+      ]
+    },
+    {
+      "class": "person",
+      "bbox": [
+        241.0,
+        340.0,
+        303.0,
+        508.0
+      ]
+    },
+    {
+      "class": "safety_vest",
+      "bbox": [
+        248.0,
+        360.0,
+        298.0,
+        440.0
+      ]
+    },
+    {
+      "class": "person",
+      "bbox": [
+        1441.0,
+        178.0,
+        1483.0,
+        288.0
+      ]
+    },
+    {
+      "class": "safety_vest",
+      "bbox": [
+        1446.0,
+        191.0,
+        1484.0,
+        244.0
+      ]
+    },
+    {
+      "class": "person",
+      "bbox": [
+        433.0,
+        298.0,
+        490.0,
+        373.0
+      ]
+    },
+    {
+      "class": "hardhat",
+      "bbox": [
+        445.0,
+        298.0,
+        475.0,
+        325.0
+      ]
+    }
+  ],
+  "predicted": [
+    {
+      "class": "person",
+      "conf": 0.8536,
+      "bbox": [
+        1130.5,
+        394.0,
+        1214.6,
+        614.2
+      ]
+    },
+    {
+      "class": "person",
+      "conf": 0.8405,
+      "bbox": [
+        241.1,
+        340.2,
+        302.5,
+        507.7
+      ]
+    },
+    {
+      "class": "person",
+      "conf": 0.6643,
+      "bbox": [
+        1441.8,
+        178.5,
+        1482.7,
+        288.5
+      ]
+    },
+    {
+      "class": "pallet",
+      "conf": 0.4532,
+      "bbox": [
+        1272.6,
+        665.4,
+        1534.7,
+        1017.0
+      ]
+    },
+    {
+      "class": "forklift",
+      "conf": 0.407,
+      "bbox": [
+        358.4,
+        246.2,
+        549.2,
+        502.9
+      ]
+    },
+    {
+      "class": "person",
+      "conf": 0.3353,
+      "bbox": [
+        433.9,
+        298.3,
+        489.4,
+        372.7
+      ]
+    }
+  ],
+  "failure_reasons": [
+    "missed_helmet_1",
+    "missed_vest_3"
+  ],
+  "evaluation_context": "Factory logistics yard with multiple workers, forklift operator, and distant workers."
+}

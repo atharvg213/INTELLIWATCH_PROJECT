@@ -1,0 +1,52 @@
+{
+  "failure_id": "fail_009_test_worker_seq_frame_046",
+  "image_name": "test_worker_seq_frame_046.jpg",
+  "source_camera": "CCTV-01",
+  "model_version": "yolo11n_v1.0 + safetyvision_v1.0",
+  "expected": [
+    {
+      "class": "person",
+      "bbox": [
+        683.3,
+        169.2,
+        833.3,
+        576.8
+      ]
+    },
+    {
+      "class": "hardhat",
+      "bbox": [
+        718.3,
+        159.2,
+        798.3,
+        234.2
+      ]
+    },
+    {
+      "class": "safety_vest",
+      "bbox": [
+        703.3,
+        259.2,
+        813.3,
+        439.2
+      ]
+    }
+  ],
+  "predicted": [
+    {
+      "class": "person",
+      "conf": 0.889,
+      "bbox": [
+        794.1,
+        259.7,
+        989.8,
+        600.4
+      ]
+    }
+  ],
+  "failure_reasons": [
+    "missed_helmet_1",
+    "missed_vest_1"
+  ],
+  "evaluation_context": "Worker in motion traversing warehouse CCTV scene (frame 46, motion blur evaluation)."
+}

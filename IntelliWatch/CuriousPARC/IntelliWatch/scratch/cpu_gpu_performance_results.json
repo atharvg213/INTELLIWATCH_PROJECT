@@ -1,0 +1,38 @@
+{
+  "640x640": {
+    "cpu": {
+      "device": "cpu",
+      "imgsz": 640,
+      "warmup_ms": 2423.09,
+      "steady_state_latency_ms": 94.02,
+      "fps": 10.64,
+      "detections_count": 9
+    },
+    "cuda": {
+      "device": "cuda",
+      "imgsz": 640,
+      "warmup_ms": 1419.09,
+      "steady_state_latency_ms": 36.21,
+      "fps": 27.62,
+      "detections_count": 9
+    }
+  },
+  "960x960": {
+    "cpu": {
+      "device": "cpu",
+      "imgsz": 960,
+      "warmup_ms": 360.62,
+      "steady_state_latency_ms": 163.32,
+      "fps": 6.12,
+      "detections_count": 10
+    },
+    "cuda": {
+      "device": "cuda",
+      "imgsz": 960,
+      "warmup_ms": 252.11,
+      "steady_state_latency_ms": 36.19,
+      "fps": 27.63,
+      "detections_count": 10
+    }
+  }
+}

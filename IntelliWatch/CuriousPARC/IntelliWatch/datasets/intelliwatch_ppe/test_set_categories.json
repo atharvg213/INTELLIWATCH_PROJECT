@@ -1,0 +1,124 @@
+{
+  "test_factory_yard.jpg": {
+    "categories": [
+      "C",
+      "D",
+      "E",
+      "F",
+      "I",
+      "L",
+      "O"
+    ],
+    "description": "Factory logistics yard with multiple workers, forklift operator, and distant workers."
+  },
+  "test_scaffolding.jpg": {
+    "categories": [
+      "B",
+      "C",
+      "E",
+      "G",
+      "J",
+      "K",
+      "L"
+    ],
+    "description": "Multi-elevation industrial scaffolding with workers wearing hardhats but lacking safety vests."
+  },
+  "test_cctv_single_worker.jpg": {
+    "categories": [
+      "A",
+      "H",
+      "J",
+      "M"
+    ],
+    "description": "Close-up CCTV inspection view of single worker without helmet and without safety vest."
+  },
+  "test_worker_seq_frame_042.jpg": {
+    "categories": [
+      "A",
+      "H",
+      "J",
+      "N"
+    ],
+    "description": "Worker in motion traversing warehouse CCTV scene (frame 42, motion blur evaluation)."
+  },
+  "test_worker_seq_frame_046.jpg": {
+    "categories": [
+      "A",
+      "H",
+      "J",
+      "N"
+    ],
+    "description": "Worker in motion traversing warehouse CCTV scene (frame 46, motion blur evaluation)."
+  },
+  "test_worker_seq_frame_050.jpg": {
+    "categories": [
+      "A",
+      "H",
+      "J",
+      "N"
+    ],
+    "description": "Worker in motion traversing warehouse CCTV scene (frame 50, motion blur evaluation)."
+  },
+  "test_worker_seq_frame_054.jpg": {
+    "categories": [
+      "A",
+      "H",
+      "J",
+      "N"
+    ],
+    "description": "Worker in motion traversing warehouse CCTV scene (frame 54, motion blur evaluation)."
+  },
+  "test_worker_seq_frame_058.jpg": {
+    "categories": [
+      "A",
+      "H",
+      "J",
+      "N"
+    ],
+    "description": "Worker in motion traversing warehouse CCTV scene (frame 58, motion blur evaluation)."
+  },
+  "test_two_workers_overlap_1.jpg": {
+    "categories": [
+      "B",
+      "D",
+      "G",
+      "I",
+      "K",
+      "L"
+    ],
+    "description": "Two overlapping workers with authentic textures, partial occlusion and gear (composition 1)."
+  },
+  "test_two_workers_overlap_2.jpg": {
+    "categories": [
+      "B",
+      "D",
+      "G",
+      "I",
+      "K",
+      "L"
+    ],
+    "description": "Two overlapping workers with authentic textures, partial occlusion and gear (composition 2)."
+  },
+  "test_two_workers_overlap_3.jpg": {
+    "categories": [
+      "B",
+      "D",
+      "G",
+      "I",
+      "K",
+      "L"
+    ],
+    "description": "Two overlapping workers with authentic textures, partial occlusion and gear (composition 3)."
+  },
+  "test_two_workers_overlap_4.jpg": {
+    "categories": [
+      "B",
+      "D",
+      "G",
+      "I",
+      "K",
+      "L"
+    ],
+    "description": "Two overlapping workers with authentic textures, partial occlusion and gear (composition 4)."
+  }
+}

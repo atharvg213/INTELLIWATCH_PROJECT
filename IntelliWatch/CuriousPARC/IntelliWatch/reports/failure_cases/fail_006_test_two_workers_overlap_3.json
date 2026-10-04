@@ -1,0 +1,69 @@
+{
+  "failure_id": "fail_006_test_two_workers_overlap_3",
+  "image_name": "test_two_workers_overlap_3.jpg",
+  "source_camera": "Facility-Wide-Angle",
+  "model_version": "yolo11n_v1.0 + safetyvision_v1.0",
+  "expected": [
+    {
+      "class": "person",
+      "bbox": [
+        400.0,
+        200.0,
+        550.0,
+        600.0
+      ]
+    },
+    {
+      "class": "hardhat",
+      "bbox": [
+        445.0,
+        200.0,
+        505.0,
+        260.0
+      ]
+    },
+    {
+      "class": "safety_vest",
+      "bbox": [
+        420.0,
+        280.0,
+        530.0,
+        450.0
+      ]
+    },
+    {
+      "class": "person",
+      "bbox": [
+        500.0,
+        220.0,
+        630.0,
+        600.0
+      ]
+    },
+    {
+      "class": "no_hardhat",
+      "bbox": [
+        537.0,
+        222.0,
+        593.0,
+        278.0
+      ]
+    },
+    {
+      "class": "safety_vest",
+      "bbox": [
+        515.0,
+        300.0,
+        615.0,
+        460.0
+      ]
+    }
+  ],
+  "predicted": [],
+  "failure_reasons": [
+    "missed_person_2",
+    "missed_helmet_1",
+    "missed_vest_2"
+  ],
+  "evaluation_context": "Two overlapping workers benchmark with partial occlusions (synthetic pattern 3)."
+}

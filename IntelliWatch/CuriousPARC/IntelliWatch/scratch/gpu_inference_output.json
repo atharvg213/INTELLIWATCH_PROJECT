@@ -1,0 +1,134 @@
+{
+  "device": "cuda",
+  "yolo_device": "cuda:0",
+  "img_shape": [
+    848,
+    1264,
+    3
+  ],
+  "num_detections": 10,
+  "avg_latency_ms": 41.54,
+  "fps": 24.07,
+  "detections": [
+    {
+      "detection_id": "det_4708f82c",
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.866,
+      "bbox": [
+        1026.34,
+        449.31,
+        1219.49,
+        844.59
+      ]
+    },
+    {
+      "detection_id": "det_c53128fb",
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.8294,
+      "bbox": [
+        1127.35,
+        382.39,
+        1232.14,
+        586.99
+      ]
+    },
+    {
+      "detection_id": "det_3197d979",
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.8046,
+      "bbox": [
+        34.18,
+        394.77,
+        149.55,
+        597.45
+      ]
+    },
+    {
+      "detection_id": "det_7ddcfa4c",
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.7802,
+      "bbox": [
+        857.2,
+        424.46,
+        989.1,
+        819.52
+      ]
+    },
+    {
+      "detection_id": "det_c184426e",
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.6594,
+      "bbox": [
+        669.34,
+        324.22,
+        758.43,
+        429.7
+      ]
+    },
+    {
+      "detection_id": "det_28c6d0db",
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.6368,
+      "bbox": [
+        614.99,
+        392.1,
+        739.94,
+        696.94
+      ]
+    },
+    {
+      "detection_id": "det_2c2520a3",
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.5826,
+      "bbox": [
+        259.08,
+        329.63,
+        364.46,
+        597.26
+      ]
+    },
+    {
+      "detection_id": "det_fbaf3f0e",
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.4439,
+      "bbox": [
+        528.86,
+        312.92,
+        581.05,
+        392.89
+      ]
+    },
+    {
+      "detection_id": "det_68ae8626",
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.3886,
+      "bbox": [
+        168.86,
+        488.86,
+        268.73,
+        641.39
+      ]
+    },
+    {
+      "detection_id": "det_034e5a37",
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.25,
+      "bbox": [
+        364.44,
+        337.02,
+        458.57,
+        593.82
+      ]
+    }
+  ]
+}

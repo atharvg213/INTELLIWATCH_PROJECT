@@ -1,0 +1,273 @@
+{
+  "timestamp": "2026-10-01 13:44:42 UTC",
+  "hardware": {
+    "device_name": "NVIDIA GeForce RTX 5050 Laptop GPU",
+    "cuda_available": true,
+    "cuda_capability": null,
+    "resolved_execution_device": "cuda",
+    "hardware_note": "Active hardware acceleration on NVIDIA GeForce RTX 5050 Laptop GPU (sm_120 (CC 12.0))."
+  },
+  "operational": {
+    "average_latency_ms": 382.22,
+    "fps": 2.62,
+    "memory_before_mb": 868.04,
+    "memory_after_mb": 1657.21,
+    "cpu_utilization_percent": 38.6
+  },
+  "models": {
+    "person_detector": "yolo11n_coco_v1.0.pt",
+    "ppe_detector": "safetyvision_ppe_yolov8n_v1.0.pt"
+  },
+  "metrics": {
+    "person": {
+      "total_gt": 22,
+      "total_pred": 21,
+      "tp": 21,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.9545,
+      "f1": 0.9767,
+      "map50": 0.9545,
+      "map50_95": 0.8895
+    },
+    "hardhat": {
+      "total_gt": 7,
+      "total_pred": 7,
+      "tp": 6,
+      "fp": 1,
+      "fn": 1,
+      "precision": 0.8571,
+      "recall": 0.8571,
+      "f1": 0.8571,
+      "map50": 0.7959,
+      "map50_95": 0.4776
+    },
+    "safety_vest": {
+      "total_gt": 6,
+      "total_pred": 6,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "map50": 1.0,
+      "map50_95": 0.7389
+    }
+  },
+  "ppe_association": {
+    "correct_associations": 19,
+    "incorrect_associations": 0,
+    "missed_associations": 0,
+    "association_accuracy": 1.0
+  },
+  "tracking": {
+    "id_switches": 0,
+    "duplicate_tracks": 0,
+    "missed_tracks": 1
+  },
+  "hard_negatives": {
+    "total_frames": 4,
+    "false_person_detections": 1,
+    "unassociated_gear_detected": 1
+  },
+  "categories_breakdown": {
+    "A": {
+      "name": "One person",
+      "images": 6,
+      "status": "Evaluated",
+      "gt_persons": 6,
+      "pred_persons": 6,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "B": {
+      "name": "Two people",
+      "images": 5,
+      "status": "Evaluated",
+      "gt_persons": 12,
+      "pred_persons": 11,
+      "tp": 11,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.9167,
+      "f1": 0.9565
+    },
+    "C": {
+      "name": "5+ people",
+      "images": 2,
+      "status": "Evaluated",
+      "gt_persons": 8,
+      "pred_persons": 8,
+      "tp": 8,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "D": {
+      "name": "People overlapping",
+      "images": 5,
+      "status": "Evaluated",
+      "gt_persons": 12,
+      "pred_persons": 11,
+      "tp": 11,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.9167,
+      "f1": 0.9565
+    },
+    "E": {
+      "name": "People far away",
+      "images": 2,
+      "status": "Evaluated",
+      "gt_persons": 8,
+      "pred_persons": 8,
+      "tp": 8,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "F": {
+      "name": "Partially occluded people",
+      "images": 1,
+      "status": "Evaluated",
+      "gt_persons": 4,
+      "pred_persons": 4,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "G": {
+      "name": "Helmet present",
+      "images": 5,
+      "status": "Evaluated",
+      "gt_persons": 12,
+      "pred_persons": 11,
+      "tp": 11,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.9167,
+      "f1": 0.9565
+    },
+    "H": {
+      "name": "Helmet absent",
+      "images": 6,
+      "status": "Evaluated",
+      "gt_persons": 6,
+      "pred_persons": 6,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "I": {
+      "name": "Vest present",
+      "images": 5,
+      "status": "Evaluated",
+      "gt_persons": 12,
+      "pred_persons": 11,
+      "tp": 11,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.9167,
+      "f1": 0.9565
+    },
+    "J": {
+      "name": "Vest absent",
+      "images": 7,
+      "status": "Evaluated",
+      "gt_persons": 10,
+      "pred_persons": 10,
+      "tp": 10,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "K": {
+      "name": "Helmet partially visible",
+      "images": 5,
+      "status": "Evaluated",
+      "gt_persons": 12,
+      "pred_persons": 11,
+      "tp": 11,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.9167,
+      "f1": 0.9565
+    },
+    "L": {
+      "name": "Vest partially visible",
+      "images": 6,
+      "status": "Evaluated",
+      "gt_persons": 16,
+      "pred_persons": 15,
+      "tp": 15,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.9375,
+      "f1": 0.9677
+    },
+    "M": {
+      "name": "Low light",
+      "images": 1,
+      "status": "Evaluated",
+      "gt_persons": 1,
+      "pred_persons": 1,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "N": {
+      "name": "Motion blur",
+      "images": 5,
+      "status": "Evaluated",
+      "gt_persons": 5,
+      "pred_persons": 5,
+      "tp": 5,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "O": {
+      "name": "Crowded industrial scene",
+      "images": 1,
+      "status": "Evaluated",
+      "gt_persons": 4,
+      "pred_persons": 4,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "failure_cases_count": 1
+}

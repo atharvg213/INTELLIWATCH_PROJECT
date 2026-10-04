@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IntelliWatch — Industrial Visual Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #e9e9e1;
+      background: #11120f;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      --bg: #11120f;
+      --panel: #191a17;
+      --panel2: #20211d;
+      --line: #30312c;
+      --muted: #92938b;
+      --faint: #66675f;
+      --olive: #98966a;
+      --olive-light: #bbb98b;
+      --amber: #d9a05d;
+      --red: #d36a58;
+      --green: #9cbd8c;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; min-width: 360px; background: var(--bg); overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+    ::selection { background: #777650; color: #ffffff; }
+
+    /* WORDMARK & LOGO */
+    .wordmark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.13em;
+    }
+    .wordmark-light { font-weight: 400; color: #b0b0a4; }
+    .brand-symbol {
+      width: 19px;
+      height: 19px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      transform: rotate(-45deg);
+    }
+    .brand-symbol i {
+      background: var(--olive-light);
+      display: block;
+    }
+    .brand-symbol i:nth-child(2),
+    .brand-symbol i:nth-child(3) { opacity: 0.5; }
+
+    /* HEADER */
+    .site-header {
+      height: 78px;
+      padding: 0 6.4%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      background: rgba(17, 18, 15, 0.7);
+      backdrop-filter: blur(12px);
+    }
+    .brand-link { display: flex; align-items: center; }
+    .site-nav {
+      display: flex;
+      gap: 38px;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      color: #babbb2;
+    }
+    .site-nav a:hover,
+    .text-link:hover { color: var(--olive-light); }
+
+    .header-cta,
+    .solid-cta,
+    .outline-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      text-transform: uppercase;
+      transition: all 0.25s ease;
+    }
+    .header-cta {
+      height: 39px;
+      padding: 0 18px;
+      border: 1px solid rgba(153, 152, 128, 0.44);
+      color: #e6e5d5;
+      background: rgba(152, 150, 106, 0.08);
+    }
+    .header-cta:hover,
+    .outline-cta:hover {
+      background: rgba(119, 118, 80, 0.25);
+      border-color: var(--olive-light);
+      transform: translateY(-1px);
+    }
+
+    /* HERO SECTION */
+    .home-hero {
+      min-height: 670px;
+      height: min(790px, 92vh);
+      padding: 135px 6.4% 66px;
+      display: grid;
+      grid-template-columns: minmax(370px, 0.86fr) minmax(500px, 1.14fr) 24px;
+      gap: 34px;
+      position: relative;
+    }
+    .hero-copy { position: relative; z-index: 2; }
+    .eyebrow {
+      font-size: 9px;
+      color: #acaca0;
+      letter-spacing: 0.17em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-transform: uppercase;
+    }
+    .eyebrow-line { height: 1px; width: 27px; background: var(--olive); }
+    .eyebrow-index { margin-left: auto; color: #686960; }
+    .hero-copy h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(74px, 8.5vw, 126px);
+      line-height: 0.82;
+      letter-spacing: -0.025em;
+      margin: 45px 0 24px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .hero-copy h1 span { color: var(--olive-light); }
+    .hero-intro {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #b7b8b0;
+      margin-bottom: 28px;
+      max-width: 420px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .solid-cta {
+      background: var(--olive);
+      border: 1px solid var(--olive-light);
+      color: #10110e;
+      padding: 15px 22px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .solid-cta:hover {
+      background: #b8b58a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 18px rgba(187, 185, 139, 0.25);
+    }
+    .outline-cta {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #d8d8ce;
+      padding: 14px 20px;
+    }
+    .hero-note {
+      position: absolute;
+      bottom: 6px;
+      left: 0;
+      font-size: 9px;
+      line-height: 1.75;
+      color: #8e8f84;
+      letter-spacing: 0.12em;
+    }
+    .note-rule { display: block; width: 26px; height: 1px; background: var(--olive); margin-bottom: 8px; }
+
+    /* HERO VISUAL FRAME */
+    .hero-visual {
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      min-height: 480px;
+      animation: reveal 0.8s ease both;
+      border: 1px solid #30312c;
+      transition: background-image 0.5s ease-in-out;
+    }
+    .hero-visual::after {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      pointer-events: none;
+    }
+    .hero-visual-meta,
+    .hero-photo-caption {
+      position: absolute;
+      z-index: 2;
+      left: 27px;
+      right: 27px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      color: #d4d3c7;
+    }
+    .hero-visual-meta { top: 26px; }
+    .hero-photo-caption { bottom: 26px; align-items: flex-end; }
+    .hero-photo-caption span:last-child {
+      font: 600 24px 'Barlow Condensed', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #ffffff;
+    }
+
+    .online-dot,
+    .offline-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      vertical-align: middle;
+      margin-left: 6px;
+      box-shadow: 0 0 8px rgba(156, 189, 140, 0.6);
+    }
+    .offline-dot { background: var(--red); box-shadow: none; }
+
+    .hero-frame-mark {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      z-index: 2;
+    }
+    .top-left {
+      left: 10px;
+      top: 10px;
+      border-top: 1px solid var(--olive-light);
+      border-left: 1px solid var(--olive-light);
+    }
+    .bottom-right {
+      right: 10px;
+      bottom: 10px;
+      border-right: 1px solid var(--olive-light);
+      border-bottom: 1px solid var(--olive-light);
+    }
+
+    .hero-rail {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 13px;
+      padding-top: 40px;
+      color: #898a7f;
+      font-size: 8px;
+      letter-spacing: 0.15em;
+    }
+    .rail-line { height: 95px; width: 1px; background: linear-gradient(var(--olive), rgba(255, 255, 255, 0.08)); }
+    .vertical-label { writing-mode: vertical-rl; }
+
+    /* PROOF STRIP (LIVE TELEMETRY) */
+    .proof-strip {
+      min-height: 96px;
+      margin: 0 6.4%;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr) 1.1fr;
+      align-items: center;
+      background: rgba(25, 26, 23, 0.6);
+    }
+    .proof-label,
+    .proof-metric span,
+    .proof-status {
+      font-size: 8px;
+      letter-spacing: 0.13em;
+      color: #96978c;
+      line-height: 1.7;
+      text-transform: uppercase;
+    }
+    .proof-metric {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-left: 24px;
+      border-left: 1px solid var(--line);
+    }
+    .proof-metric strong {
+      font: 600 28px 'Barlow Condensed', sans-serif;
+      letter-spacing: 0.02em;
+      color: #e8e8df;
+      font-variant-numeric: tabular-nums;
+    }
+    .proof-status {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 16px;
+    }
+    .status-indicator {
+      height: 7px;
+      width: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 7px rgba(156, 189, 140, 0.6);
+      animation: pulse 2s infinite ease-in-out;
+    }
+    .status-indicator.offline { background: var(--amber); box-shadow: none; }
+    .status-date {
+      border-left: 1px solid var(--line);
+      padding-left: 12px;
+      color: #888981;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+    }
+
+    /* ENVIRONMENTS SECTION */
+    .sector-section,
+    .intelligence-section {
+      padding: 95px 6.4% 105px;
+    }
+    .section-kicker {
+      border-top: 1px solid var(--line);
+      padding-top: 15px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--olive-light);
+      font-size: 9px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+    .section-kicker span { color: #74756d; }
+    .sector-layout {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 8%;
+      padding-top: 43px;
+    }
+    .sector-heading h2,
+    .intel-grid h2 {
+      font: 600 clamp(48px, 6.5vw, 84px)/0.88 'Barlow Condensed', sans-serif;
+      margin: 0;
+      letter-spacing: -0.015em;
+      text-transform: uppercase;
+    }
+    .sector-heading h2 i,
+    .intel-grid h2 i {
+      font-style: normal;
+      color: var(--olive-light);
+    }
+    .sector-heading p {
+      font-size: 12px;
+      line-height: 1.8;
+      color: #93948b;
+      margin-top: 25px;
+      max-width: 380px;
+    }
+    .sector-preview {
+      height: 160px;
+      width: 82%;
+      margin-top: 26px;
+      background-size: cover;
+      background-position: center;
+      filter: grayscale(40%);
+      border: 1px solid var(--line);
+      transition: background-image 0.4s ease;
+    }
+    .sector-list { border-top: 1px solid var(--line); }
+    .sector-row {
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      padding: 23px 2px;
+      display: grid;
+      grid-template-columns: 40px 1fr auto 24px;
+      align-items: center;
+      text-align: left;
+      gap: 13px;
+      cursor: pointer;
+      transition: padding 0.2s, color 0.2s, background 0.2s;
+    }
+    .sector-row:hover,
+    .sector-row.selected {
+      padding-left: 12px;
+      color: var(--olive-light);
+      background: rgba(152, 150, 106, 0.04);
+    }
+    .sector-count { font-size: 9px; color: #6f7069; font-family: 'JetBrains Mono', monospace; }
+    .sector-name { font: 600 24px 'Barlow Condensed', sans-serif; text-transform: uppercase; }
+    .sector-tags { font-size: 8px; letter-spacing: 0.1em; color: #7f8078; font-family: 'JetBrains Mono', monospace; }
+    .sector-arrow { opacity: 0; color: var(--olive-light); transition: opacity 0.2s; }
+    .sector-row:hover .sector-arrow,
+    .sector-row.selected .sector-arrow { opacity: 1; }
+
+    /* INTELLIGENCE PIPELINE */
+    .intelligence-section { padding-top: 25px; }
+    .intel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10%;
+      padding: 54px 0 65px;
+    }
+    .intel-overline {
+      font-size: 9px;
+      color: #8c8d82;
+      letter-spacing: 0.16em;
+      margin-bottom: 22px;
+      text-transform: uppercase;
+    }
+    .intel-copy { padding-top: 20px; }
+    .intel-copy > p {
+      color: #a5a69b;
+      line-height: 1.85;
+      font-size: 14px;
+      max-width: 480px;
+    }
+    .pipeline {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 35px 0;
+      color: var(--olive-light);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .pipeline-stage {
+      padding: 6px 10px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+    }
+    .text-link {
+      font-size: 9px;
+      letter-spacing: 0.13em;
+      color: #d7d7ca;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    /* IMAGE STORY (PLATFORM) */
+    .image-story {
+      height: 360px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      margin-top: 30px;
+    }
+    .story-image {
+      height: 100%;
+      background: linear-gradient(0deg, rgba(18, 19, 15, 0.85), transparent 75%),
+        url('https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1800&q=85') center 48% / cover;
+      filter: grayscale(35%);
+      transition: transform 0.6s ease;
+    }
+    .image-story:hover .story-image { transform: scale(1.025); }
+    .story-caption {
+      position: absolute;
+      bottom: 24px;
+      left: 28px;
+      right: 28px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      color: #d8d8ce;
+      text-transform: uppercase;
+    }
+
+    /* FOOTER */
+    .site-footer {
+      min-height: 85px;
+      border-top: 1px solid var(--line);
+      padding: 0 6.4%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #77786f;
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      background: #0d0e0c;
+    }
+    .site-footer .wordmark { color: #d8d8ce; }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(9px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(0.92); }
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 1100px) {
+      .home-hero {
+        grid-template-columns: minmax(325px, 0.8fr) minmax(400px, 1.2fr) 15px;
+        gap: 20px;
+        padding-left: 4%;
+        padding-right: 4%;
+      }
+      .site-header { padding-inline: 4%; }
+      .hero-copy h1 { font-size: clamp(70px, 9vw, 105px); }
+      .sector-tags { display: none; }
+      .proof-strip { margin-inline: 4%; }
+    }
+
+    @media (max-width: 760px) {
+      .site-header { height: 64px; padding: 0 19px; }
+      .site-nav { display: none; }
+      .home-hero {
+        height: auto;
+        min-height: 0;
+        padding: 95px 20px 35px;
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .hero-copy h1 { font-size: 72px; margin: 25px 0 18px; }
+      .hero-visual { min-height: 320px; grid-row: 2; }
+      .hero-rail { display: none; }
+      .hero-note { position: static; margin-top: 20px; }
+      .proof-strip {
+        margin: 0 20px;
+        grid-template-columns: repeat(2, 1fr);
+        padding: 14px 0;
+        row-gap: 15px;
+      }
+      .proof-label { grid-column: 1 / -1; }
+      .proof-status { grid-column: 1 / -1; justify-content: flex-start; }
+      .sector-section,
+      .intelligence-section { padding: 60px 20px; }
+      .sector-layout { grid-template-columns: 1fr; gap: 23px; }
+      .sector-preview { display: none; }
+      .intel-grid { grid-template-columns: 1fr; gap: 20px; }
+      .pipeline { flex-wrap: wrap; }
+      .site-footer { padding: 18px 20px; flex-direction: column; gap: 10px; }
+    }
+  </style>
+</head>
+<body class="editorial">
+
+  <!-- TOP HEADER -->
+  <header class="site-header">
+    <a href="/" class="brand-link" aria-label="IntelliWatch Home">
+      <span class="wordmark">
+        <span class="brand-symbol"><i></i><i></i><i></i><i></i></span>
+        <span>INTELLI<span class="wordmark-light">WATCH</span></span>
+      </span>
+    </a>
+
+    <nav class="site-nav">
+      <a href="#environments">Environments</a>
+      <a href="#intelligence">Intelligence</a>
+      <a href="#platform">Platform</a>
+    </nav>
+
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <a href="/dashboard" class="header-cta">
+        <span>Launch Dashboard</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="home-hero">
+    <div class="hero-copy">
+      <div class="eyebrow">
+        <span class="eyebrow-line"></span>
+        <span>Industrial Visual Intelligence</span>
+        <span class="eyebrow-index">01 / 04</span>
+      </div>
+
+      <h1>SEE THE<br /><span>WHOLE</span><br />OPERATION.</h1>
+
+      <p class="hero-intro">
+        A clearer picture of every shift.<br />
+        Safety compliance, spatial reasoning, and evidence in one unified view.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="/dashboard" class="solid-cta">
+          <span>Open Operations Console</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+        <a href="#environments" class="outline-cta">
+          <span>Explore Environments</span>
+        </a>
+      </div>
+
+      <div class="hero-note">
+        <span class="note-rule"></span>
+        BUILT FOR THE INDUSTRIAL FLOOR.<br />
+        POWERED BY REAL-TIME COMPUTER VISION.
+      </div>
+    </div>
+
+    <!-- HERO VISUAL -->
+    <div class="hero-visual" id="heroVisual" style="background-image: linear-gradient(90deg, rgba(16, 17, 14, 0.4), transparent 47%), linear-gradient(0deg, rgba(16, 17, 14, 0.65), transparent 55%), url('https://images.unsplash.com/photo-1567789884554-0b844b597180?auto=format&fit=crop&w=1600&q=85');">
+      <div class="hero-visual-meta">
+        <span id="heroMetaSector">ENVIRONMENT / MANUFACTURING</span>
+        <span>
+          <span id="heroApiLabel">API CONNECTED</span>
+          <span class="online-dot" id="heroStatusDot"></span>
+        </span>
+      </div>
+      <div class="hero-photo-caption">
+        <span>01 — FLOOR CONTEXT</span>
+        <span id="heroCaptionName">Manufacturing</span>
+      </div>
+      <div class="hero-frame-mark top-left"></div>
+      <div class="hero-frame-mark bottom-right"></div>
+    </div>
+
+    <!-- RAIL -->
+    <div class="hero-rail">
+      <span>SCROLL TO EXPLORE</span>
+      <div class="rail-line"></div>
+      <span class="vertical-label">01 — INDUSTRIAL INDEX</span>
+    </div>
+  </section>
+
+  <!-- PROOF STRIP (LIVE TELEMETRY FROM BACKEND) -->
+  <div class="proof-strip">
+    <div class="proof-label">
+      LIVE FROM YOUR<br />CONNECTED FACILITY
+    </div>
+    <div class="proof-metric">
+      <strong id="metricCameras">--</strong>
+      <span>CAMERAS ONLINE</span>
+    </div>
+    <div class="proof-metric">
+      <strong id="metricEvents">--</strong>
+      <span>EVENTS TODAY</span>
+    </div>
+    <div class="proof-metric">
+      <strong id="metricIncidents">--</strong>
+      <span>ACTIVE INCIDENTS</span>
+    </div>
+    <div class="proof-status">
+      <span class="status-indicator" id="proofStatusIndicator"></span>
+      <span id="proofStatusText">API CONNECTED</span>
+      <span class="status-date" id="proofDate">LIVE</span>
+    </div>
+  </div>
+
+  <!-- ENVIRONMENTS SECTION -->
+  <section class="sector-section" id="environments">
+    <div class="section-kicker">
+      <span>01 — YOUR OPERATION, IN CONTEXT</span>
+      <span>SELECT AN ENVIRONMENT TO BEGIN</span>
+    </div>
+
+    <div class="sector-layout">
+      <div class="sector-heading">
+        <h2>BUILT AROUND<br />THE WAY YOU<br /><i>WORK.</i></h2>
+        <p>One visual intelligence platform calibrated for the industrial demands of your workplace.</p>
+        <div class="sector-preview" id="sectorPreview" style="background-image: url('https://images.unsplash.com/photo-1567789884554-0b844b597180?auto=format&fit=crop&w=1600&q=85');"></div>
+      </div>
+
+      <div class="sector-list">
+        <button class="sector-row selected" data-id="manufacturing" data-name="Manufacturing" data-tags="ASSEMBLY / PPE / MACHINERY / ZONES" data-img="https://images.unsplash.com/photo-1567789884554-0b844b597180?auto=format&fit=crop&w=1600&q=85">
+          <span class="sector-count">01</span>
+          <span class="sector-name">Manufacturing</span>
+          <span class="sector-tags">ASSEMBLY / PPE / MACHINERY / ZONES</span>
+          <span class="sector-arrow">→</span>
+        </button>
+
+        <button class="sector-row" data-id="warehousing" data-name="Warehousing & logistics" data-tags="FORKLIFTS / PEDESTRIANS / LOADING" data-img="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=85">
+          <span class="sector-count">02</span>
+          <span class="sector-name">Warehousing & logistics</span>
+          <span class="sector-tags">FORKLIFTS / PEDESTRIANS / LOADING</span>
+          <span class="sector-arrow">→</span>
+        </button>
+
+        <button class="sector-row" data-id="construction" data-name="Construction" data-tags="PPE / ACCESS / PROXIMITY / FALLS" data-img="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1600&q=85">
+          <span class="sector-count">03</span>
+          <span class="sector-name">Construction</span>
+          <span class="sector-tags">PPE / ACCESS / PROXIMITY / FALLS</span>
+          <span class="sector-arrow">→</span>
+        </button>
+
+        <button class="sector-row" data-id="energy" data-name="Energy & utilities" data-tags="RESTRICTED AREAS / EQUIPMENT" data-img="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1600&q=85">
+          <span class="sector-count">04</span>
+          <span class="sector-name">Energy & utilities</span>
+          <span class="sector-tags">RESTRICTED AREAS / EQUIPMENT</span>
+          <span class="sector-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTELLIGENCE SECTION -->
+  <section class="intelligence-section" id="intelligence">
+    <div class="section-kicker">
+      <span>02 — FROM VIDEO TO UNDERSTANDING</span>
+      <span>PERCEPTION / CONTEXT / ACTION</span>
+    </div>
+
+    <div class="intel-grid">
+      <div>
+        <div class="intel-overline">MORE THAN A DETECTION</div>
+        <h2>A SCENE<br />YOU CAN<br /><i>UNDERSTAND.</i></h2>
+      </div>
+
+      <div class="intel-copy">
+        <p>
+          Video frames are transformed into structured real-world observations: personnel tracks, PPE verification, motion trajectories, restricted zones, and anomaly indicators. Contextual rules link visual signals to explainable safety alerts, verifiable incidents, and downloadable audit evidence.
+        </p>
+
+        <div class="pipeline">
+          <span class="pipeline-stage">CAMERA</span>
+          <span>→</span>
+          <span class="pipeline-stage">SCENE STATE</span>
+          <span>→</span>
+          <span class="pipeline-stage">SAFETY EVENT</span>
+          <span>→</span>
+          <span class="pipeline-stage">ACTION</span>
+        </div>
+
+        <a href="/dashboard" class="text-link">
+          <span>Enter Operations Console</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- PLATFORM STORY -->
+    <div class="image-story" id="platform">
+      <div class="story-image"></div>
+      <div class="story-caption">
+        <span>INTELLIGENCE, GROUNDED IN EVIDENCE.</span>
+        <span>CAMERA + CONTEXT + CONFIDENCE + AUDITABLE ACTION</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SITE FOOTER -->
+  <footer class="site-footer">
+    <span class="wordmark">
+      <span class="brand-symbol"><i></i><i></i><i></i><i></i></span>
+      <span>INTELLI<span class="wordmark-light">WATCH</span></span>
+    </span>
+    <span>INDUSTRIAL VISUAL INTELLIGENCE & SAFETY MONITORING</span>
+    <span>&copy; <span id="year">2026</span> INTELLIWATCH</span>
+  </footer>
+
+  <!-- DYNAMIC LOGIC -->
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Sector switching logic
+    const sectors = document.querySelectorAll('.sector-row');
+    const heroVisual = document.getElementById('heroVisual');
+    const heroMetaSector = document.getElementById('heroMetaSector');
+    const heroCaptionName = document.getElementById('heroCaptionName');
+    const sectorPreview = document.getElementById('sectorPreview');
+
+    sectors.forEach(btn => {
+      btn.addEventListener('click', () => {
+        sectors.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+
+        const img = btn.getAttribute('data-img');
+        const name = btn.getAttribute('data-name');
+        const id = btn.getAttribute('data-id');
+
+        heroVisual.style.backgroundImage = `linear-gradient(90deg, rgba(16, 17, 14, 0.4), transparent 47%), linear-gradient(0deg, rgba(16, 17, 14, 0.65), transparent 55%), url('${img}')`;
+        heroMetaSector.textContent = `ENVIRONMENT / ${id.toUpperCase()}`;
+        heroCaptionName.textContent = name;
+        sectorPreview.style.backgroundImage = `url('${img}')`;
+      });
+    });
+
+    // Format local date
+    const today = new Intl.DateTimeFormat('en', { weekday: 'short', day: '2-digit', month: 'short' }).format(new Date()).toUpperCase();
+    document.getElementById('proofDate').textContent = today;
+
+    // Fetch live telemetry from backend
+    async function updateTelemetry() {
+      try {
+        const res = await fetch('/api/v1/system/metrics');
+        if (!res.ok) throw new Error('API not ok');
+        const data = await res.json();
+
+        document.getElementById('metricCameras').textContent = String(data.cameras_online ?? 0).padStart(2, '0');
+        document.getElementById('metricEvents').textContent = String(data.events_today ?? 0).padStart(2, '0');
+        document.getElementById('metricIncidents').textContent = String(data.active_incidents ?? 0).padStart(2, '0');
+
+        document.getElementById('heroApiLabel').textContent = 'API CONNECTED';
+        document.getElementById('heroStatusDot').className = 'online-dot';
+        document.getElementById('proofStatusIndicator').className = 'status-indicator';
+        document.getElementById('proofStatusText').textContent = 'API CONNECTED';
+      } catch (err) {
+        document.getElementById('heroApiLabel').textContent = 'CONNECTING';
+        document.getElementById('heroStatusDot').className = 'offline-dot';
+        document.getElementById('proofStatusIndicator').className = 'status-indicator offline';
+        document.getElementById('proofStatusText').textContent = 'STANDBY';
+      }
+    }
+
+    updateTelemetry();
+    setInterval(updateTelemetry, 5000);
+  </script>
+</body>
+</html>

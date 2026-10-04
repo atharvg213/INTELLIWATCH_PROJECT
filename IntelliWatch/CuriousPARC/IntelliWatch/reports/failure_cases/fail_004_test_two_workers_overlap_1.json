@@ -1,0 +1,71 @@
+{
+  "failure_id": "fail_004_test_two_workers_overlap_1",
+  "image_name": "test_two_workers_overlap_1.jpg",
+  "source_camera": "Facility-Wide-Angle",
+  "model_version": "yolo11n_v1.0 + safetyvision_v1.0",
+  "expected": [
+    {
+      "class": "person",
+      "bbox": [
+        500.0,
+        250.0,
+        640.0,
+        538.0
+      ]
+    },
+    {
+      "class": "hardhat",
+      "bbox": [
+        540.0,
+        250.0,
+        590.0,
+        290.0
+      ]
+    },
+    {
+      "class": "person",
+      "bbox": [
+        535.0,
+        280.0,
+        620.0,
+        500.0
+      ]
+    },
+    {
+      "class": "safety_vest",
+      "bbox": [
+        555.0,
+        300.0,
+        615.0,
+        395.0
+      ]
+    }
+  ],
+  "predicted": [
+    {
+      "class": "person",
+      "conf": 0.6695,
+      "bbox": [
+        538.3,
+        279.1,
+        631.0,
+        511.0
+      ]
+    },
+    {
+      "class": "safety_vest",
+      "conf": 0.4717,
+      "bbox": [
+        558.8,
+        307.1,
+        619.6,
+        393.9
+      ]
+    }
+  ],
+  "failure_reasons": [
+    "missed_person_1",
+    "missed_helmet_1"
+  ],
+  "evaluation_context": "Two overlapping workers with authentic textures, partial occlusion and gear (composition 1)."
+}

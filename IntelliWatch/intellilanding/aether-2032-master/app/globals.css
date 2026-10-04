@@ -1,0 +1,245 @@
+@import "tailwindcss";
+
+/* ============================================================
+   AETHER — Industrial Futurist Design System (2032)
+   Nothing precision + Liquid Glass elegance
+   ============================================================ */
+
+:root {
+  /* === Core Palette === */
+  --bg-base: #050505;
+  --bg-elevated: #0a0a0a;
+  --bg-panel: rgba(18, 18, 18, 0.72);
+
+  --text-primary: #f5f5f5;
+  --text-secondary: #a3a3a3;
+  --text-muted: #666666;
+
+  /* Brushed aluminum & metallic */
+  --metal-light: #d4d4d8;
+  --metal-mid: #a1a1aa;
+  --metal-dark: #52525b;
+
+  /* Glass & Transparency */
+  --glass-bg: rgba(255, 255, 255, 0.035);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.12);
+
+  /* Accents — Subtle electric / industrial red */
+  --accent: #c14444;
+  --accent-subtle: #9f3a3a;
+  --accent-glow: rgba(193, 68, 68, 0.15);
+
+  /* LED soft white */
+  --led: #f4f4f5;
+
+  /* Motion & Depth */
+  --ease-premium: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-organic: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-magnetic: cubic-bezier(0.23, 1.0, 0.32, 1);
+
+  /* Border radius system */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* Spacing scale (editorial) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+}
+
+/* Base */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans);
+  font-feature-settings: "tnum", "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   PREMIUM GLASS SYSTEM
+   ============================================================ */
+
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(24px) saturate(1.1);
+  -webkit-backdrop-filter: blur(24px) saturate(1.1);
+  transition: 
+    background 0.2s var(--ease-premium),
+    border-color 0.2s var(--ease-premium),
+    box-shadow 0.2s var(--ease-premium);
+}
+
+.glass:hover {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: var(--glass-highlight);
+}
+
+.glass-strong {
+  background: rgba(12, 12, 12, 0.85);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(40px) saturate(1.2);
+  -webkit-backdrop-filter: blur(40px) saturate(1.2);
+}
+
+/* Subtle hardware noise texture */
+.texture-noise {
+  position: relative;
+}
+
+.texture-noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 3px 3px;
+  pointer-events: none;
+  border-radius: inherit;
+  mix-blend-mode: screen;
+}
+
+/* ============================================================
+   TYPOGRAPHY — Industrial Geometric
+   ============================================================ */
+
+.heading-display {
+  font-weight: 200;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+}
+
+.heading-section {
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.text-industrial {
+  font-feature-settings: "tnum", "cv02";
+  letter-spacing: 0.02em;
+}
+
+/* ============================================================
+   INDUSTRIAL BUTTONS (Liquid / Magnetic)
+   ============================================================ */
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-primary);
+  backdrop-filter: blur(16px);
+  transition: all 0.2s var(--ease-magnetic);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.btn:hover {
+  background: rgba(255,255,255,0.065);
+  border-color: var(--glass-highlight);
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: var(--text-primary);
+  color: var(--bg-base);
+  border-color: var(--text-primary);
+}
+
+.btn-primary:hover {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 10px 30px -15px rgba(0,0,0,0.4);
+}
+
+/* Subtle liquid highlight on buttons */
+.btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -100%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(255,255,255,0.25) 50%,
+    transparent 80%
+  );
+  transition: left 0.6s var(--ease-premium);
+  pointer-events: none;
+}
+
+.btn:hover::after {
+  left: 250%;
+}
+
+/* ============================================================
+   FLOATING / MAGNETIC ELEMENTS
+   ============================================================ */
+
+.floating {
+  transition: transform 0.4s var(--ease-organic), box-shadow 0.4s var(--ease-premium);
+}
+
+.floating:hover {
+  transform: translateY(-4px);
+}
+
+/* ============================================================
+   SCROLL & MOTION UTILITIES
+   ============================================================ */
+
+@layer utilities {
+  .section {
+    padding-top: var(--space-9);
+    padding-bottom: var(--space-9);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .industrial-grid {
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+}
+
+/* Hide scrollbar but keep functionality */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

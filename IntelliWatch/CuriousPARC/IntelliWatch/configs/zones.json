@@ -1,0 +1,84 @@
+[
+  {
+    "zone_id": "high_voltage_01",
+    "name": "High Voltage Switchgear Area",
+    "zone_type": "restricted",
+    "polygon": [
+      [
+        100.0,
+        100.0
+      ],
+      [
+        450.0,
+        100.0
+      ],
+      [
+        500.0,
+        300.0
+      ],
+      [
+        420.0,
+        450.0
+      ],
+      [
+        120.0,
+        420.0
+      ]
+    ],
+    "enabled": true,
+    "max_dwell_seconds": 10.0,
+    "source_resolution": null
+  },
+  {
+    "zone_id": "machine_hazard_02",
+    "name": "Robotic Arm Hazard Zone",
+    "zone_type": "hazard",
+    "polygon": [
+      [
+        520.0,
+        150.0
+      ],
+      [
+        620.0,
+        150.0
+      ],
+      [
+        620.0,
+        350.0
+      ],
+      [
+        520.0,
+        350.0
+      ]
+    ],
+    "enabled": true,
+    "max_dwell_seconds": 5.0,
+    "source_resolution": null
+  },
+  {
+    "zone_id": "forklift_aisle_03",
+    "name": "Active Forklift Loading Bay",
+    "zone_type": "monitored",
+    "polygon": [
+      [
+        50.0,
+        480.0
+      ],
+      [
+        580.0,
+        480.0
+      ],
+      [
+        580.0,
+        620.0
+      ],
+      [
+        50.0,
+        620.0
+      ]
+    ],
+    "enabled": false,
+    "max_dwell_seconds": 15.0,
+    "source_resolution": null
+  }
+]

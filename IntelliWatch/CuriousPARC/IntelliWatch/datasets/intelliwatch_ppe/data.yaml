@@ -1,0 +1,13 @@
+# IntelliWatch Industrial PPE Domain Dataset Specification
+path: C:/Users/HP/Desktop/coding/WEB/IntelliWatch/CuriousPARC/IntelliWatch/datasets/intelliwatch_ppe
+train: images/train
+val: images/val
+test: images/test
+
+nc: 5
+names:
+  0: person
+  1: hardhat
+  2: safety_vest
+  3: no_hardhat
+  4: no_safety_vest

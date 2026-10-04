@@ -1,0 +1,60 @@
+{
+  "project": "IntelliWatch",
+  "version": "1.0.0",
+  "updated_at": "2026-10-01T00:00:00Z",
+  "models": {
+    "person_detector": {
+      "name": "yolo11n_coco_v1.0",
+      "architecture": "YOLO11n",
+      "weights_file": "models/person/yolo11n_coco_v1.0.pt",
+      "source": "Ultralytics YOLO11n COCO Pretrained Checkpoint",
+      "classes": [
+        "person",
+        "bicycle",
+        "car",
+        "motorcycle",
+        "airplane",
+        "bus",
+        "train",
+        "truck",
+        "boat"
+      ],
+      "target_class": "person",
+      "input_resolution": [640, 640],
+      "parameters_millions": 2.6,
+      "size_mb": 5.6,
+      "intended_use": "Primary spatial worker locator and bounding-box generator"
+    },
+    "ppe_detector": {
+      "name": "safetyvision_ppe_yolov8n_v1.0",
+      "architecture": "YOLOv8n",
+      "weights_file": "models/ppe/safetyvision_ppe_yolov8n_v1.0.pt",
+      "source": "SafetyVision Industrial PPE Fine-tuned Checkpoint",
+      "classes": [
+        "Fall-Detected",
+        "Gloves",
+        "Goggles",
+        "Hardhat",
+        "Mask",
+        "NO-Gloves",
+        "NO-Goggles",
+        "NO-Hardhat",
+        "NO-Mask",
+        "NO-Safety Vest",
+        "No_Harness",
+        "Person",
+        "Safety Vest"
+      ],
+      "primary_targets": [
+        "Hardhat",
+        "Safety Vest",
+        "NO-Hardhat",
+        "NO-Safety Vest"
+      ],
+      "input_resolution": [640, 640],
+      "parameters_millions": 3.2,
+      "size_mb": 6.2,
+      "intended_use": "Specialized gear presence and negative violation detector"
+    }
+  }
+}

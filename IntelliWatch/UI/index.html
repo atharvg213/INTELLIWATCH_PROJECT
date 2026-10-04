@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d1110" />
+    <meta name="description" content="IntelliWatch turns industrial video into explainable safety signals and evidence-led incident workflows." />
+    <title>IntelliWatch — Industrial safety intelligence</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%2319201d'/%3E%3Cpath d='M8 21h7l4-9 5 17 4-8h4' fill='none' stroke='%23bed18b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <script>
+      (() => {
+        let preference = "system";
+        try {
+          const saved = localStorage.getItem("intelliwatch-theme");
+          if (["light", "dark", "system"].includes(saved)) preference = saved;
+        } catch (_) {}
+        const systemDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? true;
+        document.documentElement.dataset.themePreference = preference;
+        document.documentElement.dataset.theme = preference === "system" ? (systemDark ? "dark" : "light") : preference;
+      })();
+    </script>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <div id="app"><div class="boot-screen"><span class="brand-mark">IW</span><span>Loading workspace</span></div></div>
+    <!-- Permanent hidden inputs for reliable 1st-click file selection immune to SPA innerHTML re-renders -->
+    <input id="permanent-video-input" type="file" accept=".mp4,.avi,.mov,.mkv,video/mp4,video/x-msvideo,video/quicktime,video/x-matroska" style="display:none;" aria-hidden="true" />
+    <input id="permanent-image-input" type="file" accept=".jpg,.jpeg,.png,image/jpeg,image/png" style="display:none;" aria-hidden="true" />
+    <noscript>IntelliWatch needs JavaScript enabled to run this interface.</noscript>
+  </body>
+</html>
